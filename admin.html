@@ -1747,129 +1747,166 @@
       <section class="panel-view active" id="panel-mkt">
         <div style="display:flex;flex-direction:column;gap:18px;">
 
-          <!-- KHỐI 0: CẤU HÌNH TIÊU ĐỀ, NỘI DUNG & LOGO PUSH NOTIFICATION (ADMIN TÙY BIẾN 100%) -->
-          <div class="crm-card" style="border:1px solid rgba(255,179,0,0.3);background:linear-gradient(180deg, rgba(255,179,0,0.03), rgba(18,24,38,0.7));">
-            <div class="crm-card-header">
-              <div>
-                <div class="crm-card-title" style="color:#ffb300;">⚙️ Cấu Hình Tiêu Đề, Nội Dung & Logo Push Notification</div>
-                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
-                  Admin tùy chỉnh 100% Tiêu đề, Nội dung và Logo/Icon thông báo hiển thị trên điện thoại khi tài khoản MKT sử dụng chức năng "Rút tiền". Không hard-code.
+          <!-- KHỐI 0: CẤU HÌNH TIÊU ĐỀ, NỘI DUNG & LOGO PUSH NOTIFICATION -->
+          <div class="crm-card" style="border:1px solid var(--border-subtle);background:var(--bg-card);">
+            <div class="crm-card-header" style="border-bottom:1px solid var(--border-subtle);padding:16px 20px;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(243,186,47,0.12);border:1px solid rgba(243,186,47,0.25);display:flex;align-items:center;justify-content:center;color:#f3ba2f;font-size:18px;">
+                  🔔
+                </div>
+                <div>
+                  <div class="crm-card-title" style="font-size:15px;font-weight:700;color:var(--text-primary);margin:0;">Cấu Hình Push Notification (MKT Withdraw)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">
+                    Tùy biến tiêu đề, nội dung và biểu tượng thông báo gửi đến iPhone khi thực hiện lệnh rút tiền.
+                  </div>
                 </div>
               </div>
-              <span class="badge" style="background:rgba(255,179,0,0.15);color:#ffb300;border:1px solid rgba(255,179,0,0.3);">Notification Template</span>
+              <span class="badge" style="background:rgba(243,186,47,0.1);color:#f3ba2f;border:1px solid rgba(243,186,47,0.25);font-size:11px;padding:4px 10px;border-radius:6px;font-weight:600;">
+                MKT Notification
+              </span>
             </div>
-            <div class="crm-card-body">
+            <div class="crm-card-body" style="padding:20px;">
               <form id="formAdminMktConfig" onsubmit="handleSaveMktConfig(event)">
-                <div class="mkt-config-grid">
-                  <div>
-                    <!-- 1. TIÊU ĐỀ -->
-                    <div style="margin-bottom:12px;">
-                      <label style="display:block;font-size:12px;font-weight:700;color:#ffffff;margin-bottom:6px;">TIÊU ĐỀ NOTIFICATION (*)</label>
-                      <input type="text" id="cfgMktTitle" class="filter-select" style="width:100%;height:38px;font-weight:600;" placeholder="Ví dụ: Thông báo rút tiền USDT (BEP-20)" required oninput="updateNotifLivePreview()">
-                      <span style="font-size:11px;color:var(--text-muted);display:block;margin-top:4px;">Dòng tiêu đề in đậm phía trên thẻ thông báo iOS.</span>
+                <div class="mkt-config-grid" style="display:grid;grid-template-columns:1.25fr 0.75fr;gap:24px;align-items:start;">
+                  
+                  <!-- CỘT 1: FORM CÀI ĐẶT TINH GỌN -->
+                  <div style="display:flex;flex-direction:column;gap:16px;">
+                    
+                    <!-- 1. Tiêu đề -->
+                    <div>
+                      <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                        Tiêu đề thông báo
+                      </label>
+                      <input type="text" id="cfgMktTitle" class="filter-select" style="width:100%;height:40px;font-size:13.5px;font-weight:600;background:var(--bg-input);border:1px solid var(--border-medium);border-radius:8px;padding:0 12px;color:var(--text-primary);" placeholder="Ví dụ: Thông báo rút tiền USDT (BEP-20)" required oninput="updateNotifLivePreview()">
                     </div>
 
-                    <!-- 2. NỘI DUNG -->
-                    <div style="margin-bottom:12px;">
-                      <label style="display:block;font-size:12px;font-weight:700;color:#ffffff;margin-bottom:6px;">NỘI DUNG NOTIFICATION (*)</label>
-                      <textarea id="cfgMktBody" class="filter-select" style="width:100%;min-height:90px;font-family:inherit;padding:10px;line-height:1.5;resize:vertical;" placeholder="Ví dụ: Lệnh rút {amount} USDT về ví {short_address} đã được xác nhận thành công trên mạng BSC." required oninput="updateNotifLivePreview()"></textarea>
-                      <span style="font-size:11px;color:var(--text-muted);display:block;margin-top:4px;">Hỗ trợ các biến tự động: <code>{amount}</code> (số tiền rút), <code>{short_address}</code> (ví rút gọn), <code>{address}</code> (ví đầy đủ), <code>{time}</code> (giờ rút).</span>
+                    <!-- 2. Nội dung -->
+                    <div>
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                        <label style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">
+                          Nội dung thông báo
+                        </label>
+                        <span style="font-size:11px;color:var(--text-muted);">Biến tự động: click để chèn</span>
+                      </div>
+                      <textarea id="cfgMktBody" class="filter-select" style="width:100%;min-height:85px;font-size:13px;font-family:inherit;background:var(--bg-input);border:1px solid var(--border-medium);border-radius:8px;padding:10px 12px;line-height:1.5;resize:vertical;color:var(--text-primary);" placeholder="Lệnh rút {amount} USDT về ví {short_address} đã được xác nhận thành công trên mạng BSC." required oninput="updateNotifLivePreview()"></textarea>
+                      
+                      <!-- Các tag biến nhanh -->
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+                        <button type="button" class="badge" style="cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid var(--border-medium);color:var(--text-secondary);font-size:11px;padding:2px 8px;border-radius:4px;" onclick="insertVariableToBody('{amount}')" title="Chèn số tiền">+ {amount}</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid var(--border-medium);color:var(--text-secondary);font-size:11px;padding:2px 8px;border-radius:4px;" onclick="insertVariableToBody('{short_address}')" title="Chèn ví rút gọn">+ {short_address}</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid var(--border-medium);color:var(--text-secondary);font-size:11px;padding:2px 8px;border-radius:4px;" onclick="insertVariableToBody('{time}')" title="Chèn giờ rút">+ {time}</button>
+                      </div>
                     </div>
 
-                    <!-- 3. LOGO / ICON THÔNG BÁO -->
-                    <div style="margin-bottom:14px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
-                      <label style="display:block;font-size:12px;font-weight:700;color:#ffb300;margin-bottom:6px;">LOGO / ICON THÔNG BÁO (TÙY BIẾN)</label>
-                      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-                        <input type="text" id="cfgMktIcon" class="filter-select" style="flex:1;height:36px;font-size:12px;" placeholder="URL ảnh hoặc data ảnh..." oninput="updateNotifLivePreview()">
-                        <label class="btn-refresh" style="background:#262d3d;color:#fff;border:1px solid rgba(255,255,255,0.2);padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;white-space:nowrap;">
+                    <!-- 3. Logo / Icon -->
+                    <div style="background:var(--bg-card-sub);border:1px solid var(--border-subtle);padding:14px;border-radius:10px;">
+                      <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">
+                        Biểu tượng / Logo thông báo
+                      </label>
+                      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+                        <input type="text" id="cfgMktIcon" class="filter-select" style="flex:1;height:38px;font-size:12px;background:var(--bg-input);border:1px solid var(--border-medium);border-radius:8px;padding:0 10px;color:var(--text-primary);" placeholder="Dán link ảnh hoặc tải ảnh lên..." oninput="updateNotifLivePreview()">
+                        <label class="btn-refresh" style="background:#1e242d;color:var(--text-primary);border:1px solid var(--border-medium);padding:0 14px;height:38px;border-radius:8px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-weight:500;">
                           📁 Tải ảnh lên
                           <input type="file" id="cfgMktFile" accept="image/*" style="display:none;" onchange="handleMktIconFileUpload(this)">
                         </label>
-                        <button type="button" class="btn-refresh" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;white-space:nowrap;" onclick="resetMktIconDefault()" title="Xóa logo, dùng icon mặc định">
-                          ✕ Mặc định
+                        <button type="button" class="btn-refresh" style="background:rgba(255,255,255,0.04);color:var(--text-secondary);border:1px solid var(--border-medium);padding:0 10px;height:38px;border-radius:8px;cursor:pointer;font-size:12px;white-space:nowrap;" onclick="resetMktIconDefault()" title="Khôi phục logo Binance mặc định">
+                          ↺ Mặc định
                         </button>
                       </div>
-                      
-                      <!-- Các nút mẫu logo nhanh -->
-                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                        <span style="font-size:11px;color:var(--text-muted);">Mẫu logo nhanh:</span>
-                        <button type="button" class="badge" style="cursor:pointer;background:#1e232d;color:#f3ba2f;border:1px solid #f3ba2f;padding:3px 8px;" onclick="setMktIconPreset('binance')">🪙 Binance</button>
-                        <button type="button" class="badge" style="cursor:pointer;background:#1e232d;color:#26a17b;border:1px solid #26a17b;padding:3px 8px;" onclick="setMktIconPreset('usdt')">₮ Tether USDT</button>
-                        <button type="button" class="badge" style="cursor:pointer;background:#1e232d;color:#3375bb;border:1px solid #3375bb;padding:3px 8px;" onclick="setMktIconPreset('trust')">🛡️ Trust Wallet</button>
-                        <button type="button" class="badge" style="cursor:pointer;background:#1e232d;color:#e2761b;border:1px solid #e2761b;padding:3px 8px;" onclick="setMktIconPreset('metamask')">🦊 MetaMask</button>
-                        <button type="button" class="badge" style="cursor:pointer;background:#1e232d;color:#00ff88;border:1px solid #00ff88;padding:3px 8px;" onclick="setMktIconPreset('wfi')">💎 WFI Coin</button>
+
+                      <!-- Hàng nút chọn nhanh (Presets) -->
+                      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <span style="font-size:11.5px;color:var(--text-muted);">Mẫu logo nhanh:</span>
+                        <button type="button" class="badge" style="cursor:pointer;background:rgba(243,186,47,0.15);color:#f3ba2f;border:1px solid #f3ba2f;padding:4px 10px;font-weight:700;border-radius:6px;" onclick="setMktIconPreset('binance')">🪙 Binance</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:#161c24;color:#26a17b;border:1px solid rgba(38,161,123,0.3);padding:4px 10px;border-radius:6px;" onclick="setMktIconPreset('usdt')">₮ Tether USDT</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:#161c24;color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:4px 10px;border-radius:6px;" onclick="setMktIconPreset('trust')">🛡️ Trust Wallet</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:#161c24;color:#e2761b;border:1px solid rgba(226,118,27,0.3);padding:4px 10px;border-radius:6px;" onclick="setMktIconPreset('metamask')">🦊 MetaMask</button>
+                        <button type="button" class="badge" style="cursor:pointer;background:#161c24;color:#00ff88;border:1px solid rgba(0,255,136,0.3);padding:4px 10px;border-radius:6px;" onclick="setMktIconPreset('wfi')">💎 WFI Coin</button>
                       </div>
                     </div>
 
-                    <!-- 4. ĐỘ TRỄ GỬI -->
-                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-                      <label style="font-size:12px;color:var(--text-muted);">Độ trễ gửi thông báo (giây):</label>
-                      <input type="number" id="cfgMktDelay" class="filter-select" style="width:80px;height:34px;text-align:center;" value="3" min="1" max="60">
+                    <!-- 4. Thanh Server Render & Độ trễ (Tối giản 1 hàng) -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg-card-sub);border:1px solid var(--border-subtle);padding:10px 14px;border-radius:8px;flex-wrap:wrap;">
+                      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary);">
+                        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;"></span>
+                        <span>Backend: <strong style="color:#00ff88;">Render Cloud</strong></span>
+                        <input type="hidden" id="cfgBackendUrl" value="https://binance-pwa-backend.onrender.com">
+                        <button type="button" class="badge" style="background:#1e242d;border:1px solid var(--border-medium);color:#38bdf8;cursor:pointer;font-size:11px;padding:2px 8px;border-radius:4px;" onclick="checkBackendHealth()">⚡ Kiểm tra</button>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);">
+                        <span>Độ trễ:</span>
+                        <input type="number" id="cfgMktDelay" class="filter-select" style="width:55px;height:28px;text-align:center;font-size:12px;background:var(--bg-input);border:1px solid var(--border-medium);border-radius:6px;color:var(--text-primary);" value="3" min="1" max="60">
+                        <span>giây</span>
+                      </div>
                     </div>
 
-                    <!-- 5. KẾT NỐI CLOUD BACKEND (RENDER / CLOUD API) -->
-                    <div style="margin-bottom:14px;background:rgba(255,255,255,0.02);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
-                      <label style="display:block;font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:4px;">🌐 URL BACKEND WEB PUSH (RENDER.COM)</label>
-                      <div style="display:flex;gap:8px;align-items:center;">
-                        <input type="text" id="cfgBackendUrl" class="filter-select" style="flex:1;height:34px;font-size:12px;" value="https://binance-pwa-backend.onrender.com" placeholder="https://binance-pwa-backend.onrender.com">
-                        <button type="button" class="btn-refresh" id="btnCheckBackend" style="background:#262d3d;color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;" onclick="checkBackendHealth()">
-                          ⚡ Kiểm tra
-                        </button>
-                      </div>
-                      <div id="backendStatusBadge" style="margin-top:6px;font-size:11.5px;padding:4px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,136,0.1);color:#00ff88;border:1px solid rgba(0,255,136,0.25);">
-                        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00ff88;"></span>
-                        <span>Trạng thái: <strong>Đang kết nối backend Render...</strong></span>
-                      </div>
-                      <span style="font-size:11px;color:var(--text-muted);display:block;margin-top:4px;">Server Web Push gửi thông báo thật qua Apple APNs. Mặc định: <code>https://binance-pwa-backend.onrender.com</code></span>
-                    </div>
+                    <!-- Thông báo Alert trạng thái -->
+                    <div id="cfgMktAlert" style="display:none;padding:8px 12px;border-radius:8px;font-size:12.5px;"></div>
 
-                    <div id="cfgMktAlert" style="display:none;padding:8px 12px;border-radius:6px;font-size:12.5px;margin-bottom:12px;"></div>
-
-                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-                      <button type="submit" class="btn-refresh" id="btnSaveMktConfig" style="background:#ffb300;color:#000000;font-weight:800;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;">
-                        💾 Lưu Cấu Hình Notification
+                    <!-- 5. Hàng nút hành động -->
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:4px;">
+                      <button type="submit" class="btn" id="btnSaveMktConfig" style="background:#f3ba2f;color:#08090b;font-weight:800;border:none;padding:10px 22px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(243,186,47,0.25);">
+                        💾 Lưu Cấu Hình
                       </button>
-                      <button type="button" class="btn-refresh" id="btnAdminTestPushReal" onclick="triggerAdminRealPushTest()" style="background:#262d3d;color:#38bdf8;border:1px solid rgba(56,189,248,0.4);font-weight:700;padding:10px 16px;border-radius:8px;cursor:pointer;" title="Gửi Push Notification thật qua Apple APNs đến tất cả iPhone MKT đang kết nối">
-                        🚀 Bắn Thử Đến iPhone Thật
+                      <button type="button" class="btn" id="btnAdminTestPushReal" onclick="triggerAdminRealPushTest()" style="background:#00ff88;color:#08090b;border:none;font-weight:800;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(0,255,136,0.25);" title="Gửi Push Notification thật qua Apple APNs đến tất cả iPhone MKT đang kết nối">
+                        🚀 Bắn Thử Đến iPhone
                       </button>
-                      <button type="button" class="btn-refresh" onclick="triggerTestPreviewAnimation()" style="background:#262d3d;color:#00ff88;border:1px solid rgba(0,255,136,0.3);font-weight:700;padding:10px 16px;border-radius:8px;cursor:pointer;">
-                        🔔 Xem Trước Trên Màn Hình
+                      <button type="button" class="btn btn-default" onclick="triggerTestPreviewAnimation()" style="background:var(--bg-card-sub);color:var(--text-primary);border:1px solid var(--border-medium);font-weight:600;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;">
+                        🔔 Xem Trước
                       </button>
-                      <a href="iphone.html" target="_blank" class="btn-refresh" style="background:#262d3d;color:#ffffff;border:1px solid rgba(255,255,255,0.25);font-weight:700;padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;" title="Mở trình mô phỏng iPhone 16 Pro">
-                        📱 Mở iPhone 16 Pro
+                      <a href="iphone.html" target="_blank" class="btn btn-default" style="background:var(--bg-card-sub);color:var(--text-primary);border:1px solid var(--border-medium);font-weight:600;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;" title="Mở trình mô phỏng iPhone 16 Pro">
+                        📱 iPhone 16 Pro
                       </a>
                     </div>
+
                   </div>
 
-                  <!-- KHUNG XEM TRƯỚC (LIVE PREVIEW CHUẨN IOS) -->
+                  <!-- CỘT 2: KHUNG XEM TRƯỚC LIVE PREVIEW CHUẨN IPHONE -->
                   <div>
-                    <label style="display:block;font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">XEM TRƯỚC MẪU HIỂN THỊ TRÊN ĐIỆN THOẠI (LIVE PREVIEW)</label>
-                    <div style="background:#000000;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);max-width:360px;">
-                      <div style="background:rgba(28,28,30,0.95);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:12px 14px;box-shadow:0 12px 32px rgba(0,0,0,0.7);display:flex;gap:12px;align-items:flex-start;">
-                        <!-- Logo xem trước cập nhật trực tiếp theo thời gian thực -->
-                        <div id="previewNotifIconContainer" style="width:38px;height:38px;border-radius:10px;background:#121417;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:17px;flex-shrink:0;overflow:hidden;">
-                          <svg viewBox="0 0 24 24" fill="none" style="width:24px;height:24px;">
-                            <path d="M12 2L4 6.5V17.5L12 22L20 17.5V6.5L12 2Z" fill="#F3BA2F"/>
-                            <path d="M12 6L7 9L12 12L17 9L12 6Z" fill="#121417"/>
-                            <path d="M7 11.5L12 14.5L17 11.5L12 8.5L7 11.5Z" fill="#121417"/>
-                            <path d="M12 15L7 12V15.5L12 18.5L17 15.5V12L12 15Z" fill="#121417"/>
-                          </svg>
+                    <div style="font-size:11.5px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+                      Xem Trước Trên Điện Thoại (Live Preview)
+                    </div>
+                    <div style="background:#050608;padding:16px;border-radius:18px;border:1px solid var(--border-subtle);box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+                      
+                      <!-- Top status giả lập điện thoại -->
+                      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:12px;padding:0 4px;">
+                        <span>09:41</span>
+                        <span style="display:inline-flex;align-items:center;gap:4px;">
+                          <span>5G</span>
+                          <span style="display:inline-block;width:16px;height:8px;border:1px solid rgba(255,255,255,0.4);border-radius:2px;position:relative;">
+                            <span style="position:absolute;left:1px;top:1px;bottom:1px;width:10px;background:#00ff88;border-radius:1px;"></span>
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- Khung Banner Thông Báo iOS -->
+                      <div style="background:rgba(28,28,32,0.96);border:1px solid rgba(255,255,255,0.14);border-radius:18px;padding:12px 14px;box-shadow:0 12px 36px rgba(0,0,0,0.8);display:flex;gap:12px;align-items:flex-start;">
+                        <!-- Logo thông báo -->
+                        <div id="previewNotifIconContainer" style="width:40px;height:40px;border-radius:10px;background:#121417;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+                          <img src="img/binance_notif_icon_sq.jpg" alt="Binance" style="width:100%;height:100%;object-fit:cover;border-radius:9px;">
                         </div>
                         <div style="flex:1;min-width:0;">
                           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                            <span id="previewNotifTitle" style="font-size:13.5px;font-weight:700;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Thông báo rút tiền USDT (BEP-20)</span>
-                            <span style="font-size:10px;color:rgba(255,255,255,0.5);margin-left:6px;">bây giờ</span>
+                            <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);">Binance</span>
+                            <span style="font-size:10px;color:rgba(255,255,255,0.4);">bây giờ</span>
                           </div>
-                          <div id="previewNotifBody" style="font-size:12px;color:rgba(255,255,255,0.85);line-height:1.45;word-break:break-word;">
+                          <div id="previewNotifTitle" style="font-size:13px;font-weight:700;color:#ffffff;line-height:1.35;margin-bottom:3px;word-break:break-word;">
+                            Thông báo rút tiền USDT (BEP-20)
+                          </div>
+                          <div id="previewNotifBody" style="font-size:12px;color:rgba(255,255,255,0.8);line-height:1.45;word-break:break-word;">
                             Lệnh rút 100,00 USDT về ví 0x7A23...8F2 đã được xác nhận thành công trên mạng BSC.
                           </div>
-                          <div style="margin-top:4px;">
-                            <span style="display:inline-block;font-size:9.5px;font-weight:700;color:#00ff88;background:rgba(0,255,136,0.15);padding:2px 6px;border-radius:4px;">PUSH NOTIFICATION (THẬT)</span>
+                          <div style="margin-top:6px;">
+                            <span style="display:inline-block;font-size:9.5px;font-weight:700;color:#00ff88;background:rgba(0,255,136,0.12);border:1px solid rgba(0,255,136,0.25);padding:2px 6px;border-radius:4px;">
+                              ● Web Push Apple APNs
+                            </span>
                           </div>
                         </div>
                       </div>
+
                     </div>
                   </div>
+
                 </div>
               </form>
             </div>
@@ -2912,6 +2949,18 @@
           btn.textContent = '⚡ Kiểm tra';
         }
       }
+    }
+
+    function insertVariableToBody(variableText) {
+      const textarea = document.getElementById('cfgMktBody');
+      if (!textarea) return;
+      const start = textarea.selectionStart || textarea.value.length;
+      const end = textarea.selectionEnd || textarea.value.length;
+      const text = textarea.value;
+      textarea.value = text.substring(0, start) + variableText + text.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + variableText.length;
+      updateNotifLivePreview();
     }
 
     function updateNotifLivePreview() {

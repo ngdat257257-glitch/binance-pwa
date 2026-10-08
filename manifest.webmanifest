@@ -1,6 +1,6 @@
 {
-  "name": "WFI Network",
-  "short_name": "WFI",
+  "name": "Binance",
+  "short_name": "Binance",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
