@@ -2522,6 +2522,17 @@ async function getSwRegistration() {
   return null;
 }
 
+function urlB64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 async function requestSystemNotificationPermission() {
   if (!('Notification' in window)) {
     alert('⚠️ ĐỂ NHẬN THÔNG BÁO THẬT TRÊN IPHONE:\n\n1. Nhấn nút Chia sẻ (biểu tượng ⬆️ ở thanh dưới Safari)\n2. Chọn "Thêm vào Màn hình chính" (Add to Home Screen)\n3. Mở app WFI từ Màn hình chính để kích hoạt thông báo thật của iPhone!');
@@ -2538,11 +2549,39 @@ async function requestSystemNotificationPermission() {
   }
 
   if (permission === 'granted') {
+    const curUser = getCurrentUser();
+
+    // 1. Đăng ký Web Push Subscription chuẩn W3C/Apple iOS với VAPID key
+    try {
+      const reg = await getSwRegistration();
+      if (reg && reg.pushManager && window.WfiNotificationService) {
+        const vapidPublicKey = window.WfiNotificationService.VAPID_PUBLIC_KEY;
+        const convertedKey = urlB64ToUint8Array(vapidPublicKey);
+
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) {
+          sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedKey
+          });
+        }
+
+        if (sub) {
+          console.log('✓ Đã lấy được Push Subscription Apple:', sub.endpoint);
+          await window.WfiNotificationService.registerMktSubscription(sub, curUser);
+        }
+      }
+    } catch (pushErr) {
+      console.warn('Lỗi đăng ký PushManager (sẽ dùng ServiceWorker showNotification):', pushErr);
+    }
+
+    // 2. Bắn thông báo xác nhận thành công
     await triggerRealSystemNotification({
       title: 'Thông báo iPhone thật đã sẵn sàng',
-      body: 'Quyền thông báo hệ thống đã được cấp thành công. Khi tài khoản MKT rút tiền sẽ nảy thông báo thật!',
+      body: 'iPhone của bạn đã kết nối thành công với Backend Web Push! Khi MKT rút tiền sẽ nảy thông báo thật.',
       iconUrl: 'img/wfi_coin_hero.jpg'
     });
+
     if (window.showToast) window.showToast('Đã cấp quyền thông báo iPhone thật thành công!', 'success', 'Thông báo thật');
     updateAuthUI();
     return 'granted';

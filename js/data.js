@@ -181,11 +181,30 @@ const WfiDataService = {
 };
 
 /**
- * QUẢN LÝ CẤU HÌNH PUSH NOTIFICATION CHO MKT (HỖ TRỢ ĐỒNG BỘ GITHUB PAGES & CLOUD)
+ * QUẢN LÝ CẤU HÌNH PUSH NOTIFICATION CHO MKT (HỖ TRỢ ĐỒNG BỘ GITHUB PAGES & CLOUD BACKEND)
  */
 const WfiNotificationService = {
+  BACKEND_STORAGE_KEY: 'wfi_custom_backend_url',
+  DEFAULT_BACKEND_URL: 'https://binance-pwa-backend.onrender.com',
   CLOUD_API_URL: 'https://api.restful-api.dev/objects/ff808181a09d98f701a11b57dc2c2070',
   LOCAL_STORAGE_KEY: 'wfi_mkt_notification_config_v2',
+  VAPID_PUBLIC_KEY: 'BFIU7SwiIRWFUnqKrgYoNq11bco4r9ffq484DmrdbjPmSeRBhGrHr8LqCFrOvKyRgCe1nyYxgw1W0yM7yQYkBZo',
+
+  getBackendUrl() {
+    try {
+      const custom = localStorage.getItem(this.BACKEND_STORAGE_KEY);
+      if (custom && custom.trim()) return custom.trim().replace(/\/+$/, '');
+    } catch (e) {}
+    return this.DEFAULT_BACKEND_URL;
+  },
+
+  setBackendUrl(url) {
+    if (url && url.trim()) {
+      localStorage.setItem(this.BACKEND_STORAGE_KEY, url.trim().replace(/\/+$/, ''));
+    } else {
+      localStorage.removeItem(this.BACKEND_STORAGE_KEY);
+    }
+  },
 
   defaultConfig: {
     title: 'Xử lý tiền gửi USDT',
@@ -205,9 +224,11 @@ const WfiNotificationService = {
   },
 
   async fetchLatestConfig() {
-    // 1. Thử từ local backend nếu có
+    const backendUrl = this.getBackendUrl();
+
+    // 1. Thử từ Backend Render chuyên dụng
     try {
-      const res = await fetch('/api/admin/mkt/config');
+      const res = await fetch(`${backendUrl}/api/config`, { signal: AbortSignal.timeout(4000) });
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.config) {
@@ -223,9 +244,9 @@ const WfiNotificationService = {
       }
     } catch (e) {}
 
-    // 2. Thử từ Cloud API (đặc biệt khi chạy trên GitHub Pages tĩnh)
+    // 2. Thử từ Cloud API dự phòng (api.restful-api.dev)
     try {
-      const res = await fetch(this.CLOUD_API_URL);
+      const res = await fetch(this.CLOUD_API_URL, { signal: AbortSignal.timeout(3000) });
       if (res.ok) {
         const json = await res.json();
         if (json && json.data) {
@@ -255,7 +276,21 @@ const WfiNotificationService = {
     // 1. Lưu LocalStorage
     localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(toSave));
 
-    // 2. Đồng bộ lên Cloud API cho GitHub Pages
+    const backendUrl = this.getBackendUrl();
+
+    // 2. Đồng bộ lên Backend Render chuyên dụng
+    try {
+      await fetch(`${backendUrl}/api/config`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(toSave),
+        signal: AbortSignal.timeout(5000)
+      });
+    } catch (e) {
+      console.warn('Backend sync warning:', e);
+    }
+
+    // 3. Đồng bộ lên Cloud API dự phòng
     try {
       await fetch(this.CLOUD_API_URL, {
         method: 'PUT',
@@ -268,26 +303,54 @@ const WfiNotificationService = {
             icon: toSave.iconUrl,
             delaySeconds: toSave.delaySeconds
           }
-        })
-      });
-    } catch (e) {}
-
-    // 3. Đồng bộ lên local backend nếu có
-    try {
-      await fetch('/api/admin/mkt/config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: toSave.title,
-          bodyTemplate: toSave.bodyTemplate,
-          delaySeconds: toSave.delaySeconds,
-          iconUrl: toSave.iconUrl,
-          adminName: 'Hùng Quản Trị'
-        })
+        }),
+        signal: AbortSignal.timeout(4000)
       });
     } catch (e) {}
 
     return toSave;
+  },
+
+  // ĐĂNG KÝ VÀ LƯU SUBSCRIPTION CỦA MKT LÊN BACKEND
+  async registerMktSubscription(subscription, user) {
+    if (!subscription) return false;
+    const backendUrl = this.getBackendUrl();
+    try {
+      const res = await fetch(`${backendUrl}/api/save-subscription`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscription,
+          userRole: user ? user.role : 'MKT',
+          userId: user ? user.id : 'mkt_88001122',
+          userEmail: user ? user.email : 'mkt.demo@gmail.com'
+        }),
+        signal: AbortSignal.timeout(6000)
+      });
+      const data = await res.json();
+      console.log('✓ Đã đăng ký Subscription MKT với Backend:', data);
+      return data.success;
+    } catch (e) {
+      console.warn('Lỗi gửi subscription lên backend:', e);
+      return false;
+    }
+  },
+
+  // GỬI LỆNH RÚT TIỀN ĐẾN BACKEND ĐỂ GỬI WEB PUSH THẬT QUA APNS
+  async sendWithdrawToBackend(withdrawPayload) {
+    const backendUrl = this.getBackendUrl();
+    try {
+      const res = await fetch(`${backendUrl}/api/withdraw`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(withdrawPayload),
+        signal: AbortSignal.timeout(8000)
+      });
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi gọi API withdraw backend:', e);
+      return null;
+    }
   }
 };
 

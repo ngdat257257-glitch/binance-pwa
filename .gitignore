@@ -6,3 +6,4 @@ database.sqlite
 cloudflared
 cloudflared.tgz
 .DS_Store
+backend/

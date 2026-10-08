@@ -1794,9 +1794,21 @@
                     </div>
 
                     <!-- 4. ĐỘ TRỄ GỬI -->
-                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
                       <label style="font-size:12px;color:var(--text-muted);">Độ trễ gửi thông báo (giây):</label>
-                      <input type="number" id="cfgMktDelay" class="filter-select" style="width:80px;height:34px;text-align:center;" value="5" min="1" max="60">
+                      <input type="number" id="cfgMktDelay" class="filter-select" style="width:80px;height:34px;text-align:center;" value="3" min="1" max="60">
+                    </div>
+
+                    <!-- 5. KẾT NỐI CLOUD BACKEND (RENDER / CLOUD API) -->
+                    <div style="margin-bottom:14px;background:rgba(255,255,255,0.02);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+                      <label style="display:block;font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:4px;">🌐 URL BACKEND WEB PUSH (RENDER.COM)</label>
+                      <div style="display:flex;gap:8px;align-items:center;">
+                        <input type="text" id="cfgBackendUrl" class="filter-select" style="flex:1;height:34px;font-size:12px;" placeholder="https://binance-pwa-backend.onrender.com">
+                        <button type="button" class="btn-refresh" style="background:#262d3d;color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;" onclick="checkBackendHealth()">
+                          ⚡ Kiểm tra
+                        </button>
+                      </div>
+                      <span style="font-size:11px;color:var(--text-muted);display:block;margin-top:4px;">Server Web Push gửi thông báo thật qua Apple APNs. Mặc định: <code>https://binance-pwa-backend.onrender.com</code></span>
                     </div>
 
                     <div id="cfgMktAlert" style="display:none;padding:8px 12px;border-radius:6px;font-size:12.5px;margin-bottom:12px;"></div>
@@ -2762,6 +2774,8 @@
         let cfg = null;
         if (window.WfiNotificationService) {
           cfg = await WfiNotificationService.fetchLatestConfig();
+          const backendUrlInput = document.getElementById('cfgBackendUrl');
+          if (backendUrlInput) backendUrlInput.value = WfiNotificationService.getBackendUrl();
         } else {
           const res = await fetch('/api/admin/mkt/config');
           const json = await res.json();
@@ -2780,6 +2794,24 @@
         }
       } catch (e) {
         console.warn('Lỗi tải cấu hình MKT:', e);
+      }
+    }
+
+    async function checkBackendHealth() {
+      const input = document.getElementById('cfgBackendUrl');
+      const url = (input ? input.value : '').trim() || (window.WfiNotificationService ? window.WfiNotificationService.getBackendUrl() : '');
+      if (!url) return alert('Vui lòng nhập URL Backend Render');
+      
+      try {
+        const res = await fetch(`${url.replace(/\/+$/, '')}/`, { signal: AbortSignal.timeout(6000) });
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✓ Kết nối Backend Render thành công!\nTrạng thái: ${data.status}\nThiết bị MKT đang kết nối: ${data.mktSubscriptionsCount || 0}`);
+        } else {
+          alert(`⚠️ Backend phản hồi mã lỗi HTTP: ${res.status}`);
+        }
+      } catch (err) {
+        alert(`⚠️ Chưa kết nối được Backend tại: ${url}\n(Lưu ý: Nếu mới deploy trên Render, có thể server cần 30-60s để khởi động lần đầu)`);
       }
     }
 
@@ -2864,10 +2896,15 @@
       const bodyTemplate = document.getElementById('cfgMktBody')?.value.trim();
       const delaySeconds = parseInt(document.getElementById('cfgMktDelay')?.value) || 3;
       const iconUrl = document.getElementById('cfgMktIcon')?.value.trim() || '';
+      const backendUrl = document.getElementById('cfgBackendUrl')?.value.trim() || '';
       const alertEl = document.getElementById('cfgMktAlert');
       const btn = document.getElementById('btnSaveMktConfig');
 
       if (!title || !bodyTemplate) return;
+
+      if (backendUrl && window.WfiNotificationService) {
+        window.WfiNotificationService.setBackendUrl(backendUrl);
+      }
 
       if (btn) {
         btn.disabled = true;
