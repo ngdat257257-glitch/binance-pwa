@@ -2,7 +2,18 @@
  * WFI MINING - APP CONTROLLER TỐI GIẢN
  * Quản lý 4 trang chính: Tổng quan | Gói đào | Ví | Tài khoản
  * Thao tác trực tiếp, KHÔNG POPUP.
+/**
+ * Chuyển đổi endpoint API sang Backend URL (Render.com hoặc localhost)
  */
+function getApiUrl(path) {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return cleanPath;
+  }
+  const backendBase = (window.WfiNotificationService && window.WfiNotificationService.getBackendUrl()) 
+    || 'https://binance-pwa-backend.onrender.com';
+  return `${backendBase.replace(/\/+$/, '')}${cleanPath}`;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Khởi tạo điều hướng 5 trang chính
@@ -532,7 +543,7 @@ function initPackagesPage() {
     btnBuy.addEventListener('click', async () => {
       const qty = parseInt(qtyInput.value) || 1;
       try {
-        const res = await fetch('/api/package/buy', {
+        const res = await fetch(getApiUrl('/api/package/buy'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: 'user_default', quantity: qty })
@@ -706,7 +717,7 @@ async function renderWalletGeneralHistory() {
   if (!tbody) return;
 
   try {
-    const res = await fetch('/api/user/transactions?userId=user_default');
+    const res = await fetch(getApiUrl('/api/user/transactions?userId=user_default'));
     if (res.ok) {
       const data = await res.json();
       if (data.success && Array.isArray(data.transactions) && data.transactions.length > 0) {
@@ -879,7 +890,7 @@ function initDepositHandlers() {
       }
 
       try {
-        const resp = await fetch('/api/deposit/verify', {
+        const resp = await fetch(getApiUrl('/api/deposit/verify'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ txid: txid, userId: 'user_default' })
@@ -1010,7 +1021,7 @@ async function loadDepositHistory() {
   if (!container) return;
 
   try {
-    const res = await fetch('/api/user/deposits');
+    const res = await fetch(getApiUrl('/api/user/deposits'));
     if (!res.ok) throw new Error('Không thể tải lịch sử');
     const data = await res.json();
     const deposits = data.deposits || [];
@@ -1167,11 +1178,13 @@ function initWithdrawHandlers() {
         let notifPayload = null;
 
         try {
-          const resp = await fetch('/api/withdraw/request', {
+          const resp = await fetch(getApiUrl('/api/withdraw'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               userId: currentUserId,
+              userRole: isMkt ? 'MKT' : (curUser?.role || 'CUSTOMER'),
+              userEmail: curUser?.email || '',
               toAddress: addr,
               amount: amt
             })
@@ -1314,7 +1327,7 @@ async function loadWithdrawHistory() {
   if (!container) return;
 
   try {
-    const res = await fetch('/api/user/withdrawals');
+    const res = await fetch(getApiUrl('/api/user/withdrawals'));
     if (!res.ok) throw new Error('Không thể tải lịch sử rút');
     const data = await res.json();
     const withdrawals = data.withdrawals || [];
@@ -1649,7 +1662,7 @@ function showToast(msg, type, title) {
  */
 async function loadClientCommissionInfo() {
   try {
-    const res = await fetch('/api/user/commission?userId=user_default');
+    const res = await fetch(getApiUrl('/api/user/commission?userId=user_default'));
     if (!res.ok) return;
     const data = await res.json();
     if (!data.success) return;
@@ -1720,7 +1733,7 @@ function initLeaderboardPage() {
 
 async function fetchLeaderboardData() {
   try {
-    const res = await fetch('/api/leaderboard');
+    const res = await fetch(getApiUrl('/api/leaderboard'));
     if (!res.ok) return;
     const data = await res.json();
     if (!data.success) return;
@@ -1994,7 +2007,7 @@ function initLuckyWheel() {
 
 async function fetchWheelStatus() {
   try {
-    const res = await fetch('/api/wheel/status?userId=user_default');
+    const res = await fetch(getApiUrl('/api/wheel/status?userId=user_default'));
     if (!res.ok) return;
     const data = await res.json();
     if (data.success) {
@@ -2038,7 +2051,7 @@ async function handleSpinWheel() {
   updateWheelSpinsUI();
 
   try {
-    const res = await fetch('/api/wheel/spin', {
+    const res = await fetch(getApiUrl('/api/wheel/spin'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'user_default' })
@@ -2108,7 +2121,7 @@ async function handleBuyWheelSpins() {
   if (btnBuy) btnBuy.disabled = true;
 
   try {
-    const res = await fetch('/api/wheel/buy', {
+    const res = await fetch(getApiUrl('/api/wheel/buy'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'user_default', spins: 3, cost: 1.0 })
@@ -2353,7 +2366,7 @@ async function handleAuthLoginSubmit() {
   }
 
   try {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(getApiUrl('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

@@ -1955,6 +1955,19 @@
        ======================================================================== -->
   <script src="js/data.js"></script>
   <script>
+    /**
+     * Chuyển đổi endpoint API sang Backend URL (Render.com hoặc localhost)
+     */
+    function getAdminApiUrl(path) {
+      const cleanPath = path.startsWith('/') ? path : `/${path}`;
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return cleanPath;
+      }
+      const backendBase = (window.WfiNotificationService && window.WfiNotificationService.getBackendUrl()) 
+        || 'https://binance-pwa-backend.onrender.com';
+      return `${backendBase.replace(/\/+$/, '')}${cleanPath}`;
+    }
+
     // State lưu trữ dữ liệu
     const CRM = {
       users: [],
@@ -2102,7 +2115,7 @@
 
     async function loadDashboardStats() {
       try {
-        const res = await fetch('/api/admin/dashboard');
+        const res = await fetch(getAdminApiUrl('/api/admin/dashboard'));
         const data = await res.json();
         if (data.success && data.stats) {
           CRM.stats = data.stats;
@@ -2128,7 +2141,7 @@
 
     async function loadUsers() {
       try {
-        const res = await fetch('/api/admin/users');
+        const res = await fetch(getAdminApiUrl('/api/admin/users'));
         const data = await res.json();
         if (data.success && data.users) {
           CRM.users = data.users;
@@ -2141,7 +2154,7 @@
 
     async function loadPackagesAndOrders() {
       try {
-        const res = await fetch('/api/admin/packages');
+        const res = await fetch(getAdminApiUrl('/api/admin/packages'));
         const data = await res.json();
         if (data.success && data.packages) {
           CRM.packages = data.packages;
@@ -2160,7 +2173,7 @@
 
     async function loadDeposits() {
       try {
-        const res = await fetch('/api/admin/deposits');
+        const res = await fetch(getAdminApiUrl('/api/admin/deposits'));
         const data = await res.json();
         if (data.success && data.deposits) {
           CRM.deposits = data.deposits;
@@ -2173,7 +2186,7 @@
 
     async function loadWithdrawals() {
       try {
-        const res = await fetch('/api/admin/withdrawals');
+        const res = await fetch(getAdminApiUrl('/api/admin/withdrawals'));
         const data = await res.json();
         if (data.success && data.withdrawals) {
           CRM.withdrawals = data.withdrawals;
@@ -2186,7 +2199,7 @@
 
     async function loadCommissionHistory() {
       try {
-        const res = await fetch('/api/admin/commission/history');
+        const res = await fetch(getAdminApiUrl('/api/admin/commission/history'));
         const data = await res.json();
         if (data.success && data.history) {
           CRM.history = data.history;
@@ -2409,7 +2422,7 @@
     // ==========================================================================
     async function toggleLockUser(userId) {
       try {
-        const res = await fetch('/api/admin/user/toggle-lock', {
+        const res = await fetch(getAdminApiUrl('/api/admin/user/toggle-lock'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId })
@@ -2475,7 +2488,7 @@
       }
 
       try {
-        const res = await fetch('/api/admin/package/refund', {
+        const res = await fetch(getAdminApiUrl('/api/admin/package/refund'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ packageId, reason: 'Quản trị viên CRM hoàn tiền đơn hàng' })
@@ -2567,7 +2580,7 @@
       if (!confirm(`Xác nhận duyệt và ký chuyển tiền on-chain BEP20 cho lệnh #${withdrawId}?`)) return;
 
       try {
-        const res = await fetch('/api/admin/withdraw/approve', {
+        const res = await fetch(getAdminApiUrl('/api/admin/withdraw/approve'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ withdrawId })
@@ -2590,7 +2603,7 @@
       if (!reason) return;
 
       try {
-        const res = await fetch('/api/admin/withdraw/reject', {
+        const res = await fetch(getAdminApiUrl('/api/admin/withdraw/reject'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ withdrawId, reason })
@@ -2641,7 +2654,7 @@
     // ==========================================================================
     async function loadLeaderboardAdmin() {
       try {
-        const res = await fetch('/api/leaderboard');
+        const res = await fetch(getAdminApiUrl('/api/leaderboard'));
         const data = await res.json();
         if (!data.success) return;
 
@@ -2713,7 +2726,7 @@
       if (!confirm('Xác nhận chốt kết quả tuần ngay lập tức? Top 3 sẽ được cộng thưởng 1.000 / 500 / 250 USDT vào ví và bảng xếp hạng tuần sẽ reset về 0 để sang tuần mới.')) return;
 
       try {
-        const res = await fetch('/api/admin/leaderboard/settle', {
+        const res = await fetch(getAdminApiUrl('/api/admin/leaderboard/settle'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({})
@@ -2777,7 +2790,7 @@
           const backendUrlInput = document.getElementById('cfgBackendUrl');
           if (backendUrlInput) backendUrlInput.value = WfiNotificationService.getBackendUrl();
         } else {
-          const res = await fetch('/api/admin/mkt/config');
+          const res = await fetch(getAdminApiUrl('/api/admin/mkt/config'));
           const json = await res.json();
           if (json.success && json.config) cfg = json.config;
         }
@@ -2915,7 +2928,7 @@
         if (window.WfiNotificationService) {
           await WfiNotificationService.saveConfig({ title, bodyTemplate, delaySeconds, iconUrl });
         } else {
-          await fetch('/api/admin/mkt/config', {
+          await fetch(getAdminApiUrl('/api/admin/mkt/config'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title, bodyTemplate, delaySeconds, iconUrl, adminName: 'Hùng Quản Trị' })
@@ -2951,7 +2964,7 @@
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:var(--text-muted);">Đang tải danh sách...</td></tr>';
 
       try {
-        const res = await fetch('/api/admin/mkt/list');
+        const res = await fetch(getAdminApiUrl('/api/admin/mkt/list'));
         const json = await res.json();
         if (json.success && json.mktUsers) {
           if (json.mktUsers.length === 0) {
@@ -2988,7 +3001,7 @@
       tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:16px;color:var(--text-muted);">Đang tải lịch sử demo...</td></tr>';
 
       try {
-        const res = await fetch('/api/admin/mkt/demo-history');
+        const res = await fetch(getAdminApiUrl('/api/admin/mkt/demo-history'));
         const json = await res.json();
         if (json.success && json.history) {
           if (json.history.length === 0) {
@@ -3039,7 +3052,7 @@
       }
 
       try {
-        const res = await fetch('/api/admin/mkt/create', {
+        const res = await fetch(getAdminApiUrl('/api/admin/mkt/create'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, name, adminName: 'Hùng Admin' })
@@ -3083,7 +3096,7 @@
       if (!confirm(confirmText)) return;
 
       try {
-        const res = await fetch('/api/admin/mkt/toggle-lock', {
+        const res = await fetch(getAdminApiUrl('/api/admin/mkt/toggle-lock'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, isLocked, adminName: 'Hùng Admin' })
