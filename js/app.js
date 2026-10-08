@@ -2543,16 +2543,57 @@ function dismissIosNotification(id) {
 // ==============================================================================
 let swRegistration = null;
 
+// Tự động kéo cấu hình Tiêu đề, Nội dung, Logo mới nhất từ Backend Render
+async function syncLatestNotificationConfig() {
+  if (window.WfiNotificationService && typeof window.WfiNotificationService.fetchLatestConfig === 'function') {
+    try {
+      const cfg = await window.WfiNotificationService.fetchLatestConfig();
+      console.log('✓ Đã đồng bộ cấu hình Notification mới nhất từ Backend Render:', cfg?.title);
+      return cfg;
+    } catch (e) {
+      console.warn('Lỗi syncLatestNotificationConfig:', e);
+    }
+  }
+  return null;
+}
+
+// Tự động kiểm tra và gửi PushSubscription của iPhone lên Backend nếu đã được cấp quyền
+async function autoSyncExistingPushSubscription() {
+  try {
+    const curUser = getCurrentUser();
+    const isMkt = (curUser && (curUser.role === 'MKT' || curUser.email === 'mkt.demo@gmail.com'));
+    if (!isMkt) return;
+
+    if ('serviceWorker' in navigator && 'PushManager' in window && Notification.permission === 'granted') {
+      const reg = await navigator.serviceWorker.ready;
+      if (reg && reg.pushManager) {
+        let sub = await reg.pushManager.getSubscription();
+        if (sub && window.WfiNotificationService) {
+          await window.WfiNotificationService.registerMktSubscription(sub, curUser);
+          console.log('✓ Đã tự động cập nhật Push Subscription của iPhone lên Backend Render:', sub.endpoint.slice(0, 45) + '...');
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Lỗi autoSyncExistingPushSubscription:', err);
+  }
+}
+
 function initWebPushServiceWorker() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then((reg) => {
         swRegistration = reg;
         console.log('✓ Service Worker Web Push PWA đã sẵn sàng:', reg);
+        // Đồng bộ cấu hình mới nhất từ backend và subscription
+        syncLatestNotificationConfig();
+        autoSyncExistingPushSubscription();
       })
       .catch((err) => {
         console.warn('Lỗi Service Worker:', err);
       });
+  } else {
+    syncLatestNotificationConfig();
   }
 }
 

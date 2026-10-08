@@ -288,12 +288,19 @@ const WfiNotificationService = {
 
     // 2. Đồng bộ lên Backend Render chuyên dụng
     try {
-      await fetch(`${backendUrl}/api/config`, {
+      const res = await fetch(`${backendUrl}/api/config`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(toSave),
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(10000)
       });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.config) {
+          localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(json.config));
+          return json.config;
+        }
+      }
     } catch (e) {
       console.warn('Backend sync warning:', e);
     }
