@@ -4135,21 +4135,37 @@ tr.current-user-row td {
 
 @media (max-width: 680px) {
   .main-content { 
-    padding-top: max(12px, env(safe-area-inset-top, 0px)); 
-    padding-bottom: calc(76px + env(safe-area-inset-bottom, 16px));
+    padding-top: max(8px, env(safe-area-inset-top, 0px)); 
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 16px));
   }
-  .ov-balance-title { font-size: 28px; margin-top: 10px; }
+  .ov-shell {
+    padding-bottom: 20px;
+  }
+  .ov-topbar {
+    padding: 6px 4px 10px;
+  }
+  .ov-balance-title { 
+    font-size: 28px; 
+    margin-top: 6px; 
+  }
   .ov-balance-unit { font-size: 20px; }
   .ov-logo-mark { width: 34px; height: 34px; }
-  .ov-coin-stage { height: 290px; margin: 2px 0 0; }
-  .ov-coin-img { width: 280px; height: 280px; }
-  .ov-coin-glow { width: 220px; height: 220px; }
+  .ov-coin-stage { 
+    height: 250px; 
+    margin: 4px 0 6px; 
+  }
+  .ov-coin-img { width: 240px; height: 240px; }
+  .ov-coin-glow { width: 200px; height: 200px; }
+  .ov-mining-panel {
+    margin: 4px 0 24px;
+    padding: 14px 16px 40px;
+  }
   .ov-mined-value .mono { font-size: 28px; }
   .ov-stat-val { font-size: 13.5px; }
 }
 @media (max-width: 360px) {
-  .ov-coin-stage { height: 250px; }
-  .ov-coin-img { width: 240px; height: 240px; }
+  .ov-coin-stage { height: 210px; }
+  .ov-coin-img { width: 200px; height: 200px; }
   .ov-mined-value .mono { font-size: 24px; }
   .ov-stat-val { font-size: 12px; }
   .ov-uid-val { max-width: 90px; }
