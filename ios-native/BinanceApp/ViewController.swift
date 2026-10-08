@@ -86,7 +86,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     private func loadWebApp() {
         if let url = URL(string: webAppURLString) {
             activityIndicator.startAnimating()
-            let request = URLRequest(url: url, credentials: nil, cachePolicy: .reloadRevalidatingCacheData, timeoutInterval: 30)
+            let request = URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData, timeoutInterval: 30)
             webView.load(request)
         }
     }
