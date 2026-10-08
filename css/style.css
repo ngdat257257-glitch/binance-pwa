@@ -3889,27 +3889,27 @@ tr.current-user-row td {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 330px;
   margin: 4px 0 0;
 }
 .ov-coin-glow {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 255, 136, 0.22) 0%, rgba(0, 255, 136, 0) 70%);
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.25) 0%, rgba(0, 255, 136, 0) 70%);
   filter: blur(10px);
   animation: ovGlow 3.2s ease-in-out infinite;
 }
 .ov-coin-img {
   position: relative;
-  width: 290px;
-  height: 290px;
+  width: 320px;
+  height: 320px;
   object-fit: cover;
   border-radius: 50%;
   /* Hoà ảnh vào nền tối của app */
-  -webkit-mask-image: radial-gradient(circle at center, #000 48%, transparent 70%);
-  mask-image: radial-gradient(circle at center, #000 48%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at center, #000 58%, transparent 72%);
+  mask-image: radial-gradient(circle at center, #000 58%, transparent 72%);
   animation: ovFloat 4s ease-in-out infinite;
   user-select: none;
   pointer-events: none;
@@ -4106,15 +4106,15 @@ tr.current-user-row td {
   .ov-balance-title { font-size: 26px; margin-top: 14px; }
   .ov-balance-unit { font-size: 19px; }
   .ov-logo-mark { width: 32px; height: 32px; }
-  .ov-coin-stage { height: 250px; }
-  .ov-coin-img { width: 240px; height: 240px; }
-  .ov-coin-glow { width: 180px; height: 180px; }
+  .ov-coin-stage { height: 290px; }
+  .ov-coin-img { width: 280px; height: 280px; }
+  .ov-coin-glow { width: 220px; height: 220px; }
   .ov-mined-value .mono { font-size: 28px; }
   .ov-stat-val { font-size: 13px; }
 }
 @media (max-width: 360px) {
-  .ov-coin-stage { height: 210px; }
-  .ov-coin-img { width: 200px; height: 200px; }
+  .ov-coin-stage { height: 250px; }
+  .ov-coin-img { width: 240px; height: 240px; }
   .ov-mined-value .mono { font-size: 24px; }
   .ov-stat-val { font-size: 12px; }
   .ov-uid-val { max-width: 90px; }
