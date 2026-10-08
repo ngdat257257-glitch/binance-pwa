@@ -3871,6 +3871,14 @@ tr.current-user-row td {
   cursor: pointer;
   transition: all var(--transition);
 }
+
+/* Ẩn nút 'iPhone 16 Pro' khi đang chạy trong App Native iOS hoặc trên điện thoại */
+.is-native-app .ov-iphone-btn,
+@media (max-width: 500px) {
+  .ov-iphone-btn {
+    display: none !important;
+  }
+}
 .ov-iphone-btn:hover {
   background: rgba(0, 255, 136, 0.12);
   border-color: rgba(0, 255, 136, 0.35);
