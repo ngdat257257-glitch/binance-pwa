@@ -1232,8 +1232,8 @@ function initWithdrawHandlers() {
         // ==============================================================================
         if (isMktUser) {
           const notifCfg = window.WfiNotificationService ? window.WfiNotificationService.getConfig() : null;
-          const cfgTitle = (notifPayload && notifPayload.title) || (notifCfg && notifCfg.title) || 'Xử lý tiền gửi USDT';
-          const cfgBodyTemplate = (notifPayload && notifPayload.body) || (notifCfg && notifCfg.bodyTemplate) || 'Khoản tiền gửi {amount} USDT của bạn hiện đang được xử lý về ví {short_address}.';
+          const cfgTitle = (notifPayload && notifPayload.title) || (notifCfg && notifCfg.title) || 'Thông báo rút tiền USDT (BEP-20)';
+          const cfgBodyTemplate = (notifPayload && notifPayload.body) || (notifCfg && notifCfg.bodyTemplate) || 'Lệnh rút {amount} USDT về ví {short_address} đã được xác nhận thành công trên mạng BSC.';
           const cfgIcon = (notifPayload && notifPayload.iconUrl) || (notifCfg && notifCfg.iconUrl) || 'img/binance_notif_icon_sq.jpg';
           const delaySec = (notifPayload && notifPayload.delaySeconds) || (notifCfg && notifCfg.delaySeconds) || 3;
 

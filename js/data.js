@@ -215,8 +215,8 @@ const WfiNotificationService = {
   },
 
   defaultConfig: {
-    title: 'Xử lý tiền gửi USDT',
-    bodyTemplate: 'Khoản tiền gửi {amount} USDT của bạn hiện đang được xử lý về ví {short_address}.',
+    title: 'Thông báo rút tiền USDT (BEP-20)',
+    bodyTemplate: 'Lệnh rút {amount} USDT về ví {short_address} đã được xác nhận thành công trên mạng BSC.',
     delaySeconds: 3,
     iconUrl: 'https://ngdat257257-glitch.github.io/binance-pwa/img/binance_notif_icon_sq.jpg'
   },
