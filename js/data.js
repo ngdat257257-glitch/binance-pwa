@@ -218,7 +218,7 @@ const WfiNotificationService = {
     title: 'Xử lý tiền gửi USDT',
     bodyTemplate: 'Khoản tiền gửi {amount} USDT của bạn hiện đang được xử lý về ví {short_address}.',
     delaySeconds: 3,
-    iconUrl: 'img/wfi_coin_hero.jpg'
+    iconUrl: 'https://ngdat257257-glitch.github.io/binance-pwa/img/binance_notif_icon_sq.jpg'
   },
 
   getConfig() {

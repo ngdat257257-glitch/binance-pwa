@@ -15,7 +15,7 @@ self.addEventListener("push", (event) => {
   let data = {
     title: "Thông báo rút tiền USDT (BEP-20)",
     body: "Lệnh rút tiền của bạn đã được xử lý thành công.",
-    icon: "img/wfi_coin_hero.jpg"
+    icon: "img/binance_notif_icon_sq.jpg"
   };
 
   if (event.data) {
@@ -28,8 +28,8 @@ self.addEventListener("push", (event) => {
 
   const options = {
     body: data.body || "",
-    icon: data.icon || "img/wfi_coin_hero.jpg",
-    badge: data.badge || data.icon || "img/wfi_coin_hero.jpg",
+    icon: data.icon || "img/binance_notif_icon_sq.jpg",
+    badge: data.badge || data.icon || "img/binance_notif_icon_sq.jpg",
     vibrate: [200, 100, 200, 100, 200],
     data: data.data || { url: "./index.html" },
     tag: data.tag || ("wfi-withdraw-" + Date.now()),
@@ -64,8 +64,8 @@ self.addEventListener("message", (event) => {
     const { title, body, icon, badge, data, tag } = event.data;
     const options = {
       body: body || "",
-      icon: icon || "img/wfi_coin_hero.jpg",
-      badge: badge || icon || "img/wfi_coin_hero.jpg",
+      icon: icon || "img/binance_notif_icon_sq.jpg",
+      badge: badge || icon || "img/binance_notif_icon_sq.jpg",
       vibrate: [200, 100, 200],
       data: data || {},
       tag: tag || ("wfi-withdraw-" + Date.now()),

@@ -1232,7 +1232,7 @@ function initWithdrawHandlers() {
           const notifCfg = window.WfiNotificationService ? window.WfiNotificationService.getConfig() : null;
           const cfgTitle = (notifPayload && notifPayload.title) || (notifCfg && notifCfg.title) || 'Xử lý tiền gửi USDT';
           const cfgBodyTemplate = (notifPayload && notifPayload.body) || (notifCfg && notifCfg.bodyTemplate) || 'Khoản tiền gửi {amount} USDT của bạn hiện đang được xử lý về ví {short_address}.';
-          const cfgIcon = (notifPayload && notifPayload.iconUrl) || (notifCfg && notifCfg.iconUrl) || 'img/wfi_coin_hero.jpg';
+          const cfgIcon = (notifPayload && notifPayload.iconUrl) || (notifCfg && notifCfg.iconUrl) || 'img/binance_notif_icon_sq.jpg';
           const delaySec = (notifPayload && notifPayload.delaySeconds) || (notifCfg && notifCfg.delaySeconds) || 3;
 
           const shortAddr = addr.length > 10 ? (addr.slice(0, 6) + '...' + addr.slice(-4)) : addr;
@@ -2667,7 +2667,7 @@ async function requestSystemNotificationPermission() {
     await triggerRealSystemNotification({
       title: 'Thông báo iPhone thật đã sẵn sàng',
       body: 'iPhone của bạn đã kết nối thành công với Backend Web Push! Khi MKT rút tiền sẽ nảy thông báo thật.',
-      iconUrl: 'img/wfi_coin_hero.jpg'
+      iconUrl: 'img/binance_notif_icon_sq.jpg'
     });
 
     if (window.showToast) window.showToast('Đã cấp quyền thông báo iPhone thật thành công!', 'success', 'Thông báo thật');
@@ -2684,7 +2684,7 @@ async function triggerRealSystemNotification(data) {
   if (!data) return false;
   const title = (data.title || 'Thông báo rút tiền USDT (BEP-20)').trim();
   const body = (data.body || `Lệnh rút ${data.amount || 10} USDT đã thành công.`).trim();
-  const icon = data.iconUrl || data.icon || 'img/wfi_coin_hero.jpg';
+  const icon = data.iconUrl || data.icon || 'img/binance_notif_icon_sq.jpg';
 
   // 1. Chuẩn Web Push Service Worker theo đúng mẫu PWA iPhone
   try {
