@@ -52,7 +52,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         webView.backgroundColor = UIColor(red: 8/255.0, green: 9/255.0, blue: 11/255.0, alpha: 1.0)
         webView.isOpaque = false
         webView.scrollView.backgroundColor = UIColor(red: 8/255.0, green: 9/255.0, blue: 11/255.0, alpha: 1.0)
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        // Cho phép WebKit tự động tính toán safe area inset (Dynamic Island & Home bar) cho iPhone Pro Max
+        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
 
         // Kéo để tải lại (Pull to refresh)
         let refreshControl = UIRefreshControl()
