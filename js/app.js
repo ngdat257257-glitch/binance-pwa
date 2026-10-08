@@ -2736,6 +2736,44 @@ async function triggerRealSystemNotification(data) {
   return false;
 }
 
+// ==============================================================================
+// CẦU NỐI APP NATIVE IOS (WKWebView Bridge & Deep Link Navigation)
+// ==============================================================================
+window.handleNativeNotificationNavigate = function(route) {
+  console.log('✓ Nhận lệnh điều hướng từ App Native iOS:', route);
+  if (!route) return;
+  if (route.startsWith('#')) {
+    const tabName = route.replace('#', '').toLowerCase();
+    if (typeof switchTab === 'function') {
+      switchTab(tabName);
+    } else {
+      window.location.hash = route;
+    }
+  } else {
+    window.location.href = route;
+  }
+};
+
+// Hàm gửi thông báo qua App Native iOS nếu đang chạy trong WKWebView wrapper
+function triggerNativeIOSNotification(title, body, delaySeconds = 1.0, route = '#withdraw') {
+  if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeNotification) {
+    try {
+      window.webkit.messageHandlers.nativeNotification.postMessage({
+        title: title,
+        body: body,
+        delaySeconds: delaySeconds,
+        route: route
+      });
+      console.log('✓ Đã gọi Native iOS Notification qua WebKit Bridge:', title);
+      return true;
+    } catch (e) {
+      console.warn('Lỗi gọi WebKit bridge:', e);
+    }
+  }
+  return false;
+}
+window.triggerNativeIOSNotification = triggerNativeIOSNotification;
+
 // Khởi chạy Service Worker
 initWebPushServiceWorker();
 
@@ -2750,3 +2788,4 @@ window.dismissIosNotification = dismissIosNotification;
 window.showIosPushNotification = showIosPushNotification;
 window.requestSystemNotificationPermission = requestSystemNotificationPermission;
 window.triggerRealSystemNotification = triggerRealSystemNotification;
+
