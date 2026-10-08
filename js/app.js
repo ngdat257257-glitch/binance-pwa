@@ -7,11 +7,13 @@
  */
 function getApiUrl(path) {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return cleanPath;
+  let backendBase = 'https://binance-pwa-backend.onrender.com';
+  if (window.WfiNotificationService && typeof window.WfiNotificationService.getBackendUrl === 'function') {
+    backendBase = window.WfiNotificationService.getBackendUrl();
   }
-  const backendBase = (window.WfiNotificationService && window.WfiNotificationService.getBackendUrl()) 
-    || 'https://binance-pwa-backend.onrender.com';
+  if (!/^https?:\/\//i.test(backendBase)) {
+    backendBase = 'https://' + backendBase;
+  }
   return `${backendBase.replace(/\/+$/, '')}${cleanPath}`;
 }
 
