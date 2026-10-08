@@ -193,14 +193,22 @@ const WfiNotificationService = {
   getBackendUrl() {
     try {
       const custom = localStorage.getItem(this.BACKEND_STORAGE_KEY);
-      if (custom && custom.trim()) return custom.trim().replace(/\/+$/, '');
+      if (custom && custom.trim()) {
+        let cleaned = custom.trim().replace(/\/+$/, '');
+        if (!cleaned.includes('localhost') && !cleaned.includes('trycloudflare')) {
+          if (!/^https?:\/\//i.test(cleaned)) cleaned = 'https://' + cleaned;
+          return cleaned;
+        }
+      }
     } catch (e) {}
     return this.DEFAULT_BACKEND_URL;
   },
 
   setBackendUrl(url) {
     if (url && url.trim()) {
-      localStorage.setItem(this.BACKEND_STORAGE_KEY, url.trim().replace(/\/+$/, ''));
+      let cleaned = url.trim().replace(/\/+$/, '');
+      if (!/^https?:\/\//i.test(cleaned)) cleaned = 'https://' + cleaned;
+      localStorage.setItem(this.BACKEND_STORAGE_KEY, cleaned);
     } else {
       localStorage.removeItem(this.BACKEND_STORAGE_KEY);
     }
