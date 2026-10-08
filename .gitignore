@@ -7,3 +7,5 @@ cloudflared
 cloudflared.tgz
 .DS_Store
 backend/
+*.xcuserdata
+*.xcworkspace

@@ -1851,6 +1851,9 @@
                       <button type="button" class="btn" id="btnAdminTestPushReal" onclick="triggerAdminRealPushTest()" style="background:#00ff88;color:#08090b;border:none;font-weight:800;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(0,255,136,0.25);" title="Gửi Push Notification thật qua Apple APNs đến tất cả iPhone MKT đang kết nối">
                         🚀 Bắn Thử Đến iPhone
                       </button>
+                      <button type="button" class="btn" id="btnAdminSendTelegram" onclick="triggerAdminTelegramPush()" style="background:#229ED9;color:#ffffff;border:none;font-weight:800;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(34,158,217,0.35);" title="Bắn thông báo trực tiếp qua Bot Telegram về iPhone không có chữ from Binance">
+                        ✈️ Bắn Qua Telegram
+                      </button>
                       <button type="button" class="btn btn-default" onclick="triggerTestPreviewAnimation()" style="background:var(--bg-card-sub);color:var(--text-primary);border:1px solid var(--border-medium);font-weight:600;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;">
                         🔔 Xem Trước
                       </button>
@@ -3129,6 +3132,63 @@
         if (btn) {
           btn.disabled = false;
           btn.textContent = '🚀 Bắn Thử Đến iPhone Thật';
+        }
+      }
+    }
+
+    // Bắn thông báo trực tiếp qua Bot Telegram @SUPPERAI5_BOT về iPhone
+    async function triggerAdminTelegramPush() {
+      const btn = document.getElementById('btnAdminSendTelegram');
+      const title = document.getElementById('cfgMktTitle')?.value?.trim() || 'Xử lý tiền gửi USDT';
+      const bodyTemplate = document.getElementById('cfgMktBody')?.value?.trim() || 'Khoản tiền gửi 19.090 USDT của bạn hiện đang được xử lý. Nếu bạn không nhận ra hoạt động này, vui lòng liên hệ với chúng tôi ngay lập tức.';
+
+      const formattedBody = bodyTemplate
+        .replace('{amount}', '19.090')
+        .replace('{short_address}', '0x7A...8F2')
+        .replace('{time}', new Date().toLocaleTimeString('vi-VN'));
+
+      const botToken = '8764330129:AAFGAUF01c2bvCXQu7cftO_BELfNg78G0So';
+      const chatId = '6262443219';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '⏳ Đang gửi Telegram...';
+      }
+
+      try {
+        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        const res = await fetch(telegramUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: `🔔 <b>${title}</b>\n\n${formattedBody}`,
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: '📱 Mở Binance App',
+                    web_app: { url: 'https://ngdat257257-glitch.github.io/binance-pwa/' }
+                  }
+                ]
+              ]
+            }
+          })
+        });
+
+        const result = await res.json();
+        if (result.ok) {
+          alert('✓ Đã gửi thông báo thành công qua Telegram về iPhone của bạn!\nKiểm tra ngay màn hình khóa hoặc app Telegram.');
+        } else {
+          alert('⚠️ Lỗi Telegram: ' + (result.description || 'Không thể gửi tin nhắn'));
+        }
+      } catch (e) {
+        alert('⚠️ Lỗi kết nối Telegram: ' + e.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '✈️ Bắn Qua Telegram';
         }
       }
     }
