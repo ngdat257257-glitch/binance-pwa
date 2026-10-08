@@ -35,12 +35,20 @@
     </div>
 
     <div class="toolbar-actions">
-      <!-- Bộ chọn trang hiển thị trên iPhone: Khách, Quản Trị hoặc Cấu hình MKT -->
+      <!-- Bộ chọn chế độ xem: Màn hình khóa, App Khách, Bảng Quản Trị -->
       <div class="device-switcher" style="margin-right:4px;">
-        <button class="switcher-btn active" id="btnViewClient" onclick="switchIphoneFrame('index.html')">App Khách</button>
-        <button class="switcher-btn" id="btnViewManager" onclick="switchIphoneFrame('admin.html')">Bảng Quản Trị</button>
-        <button class="switcher-btn" id="btnViewMktConfig" onclick="switchIphoneFrame('admin.html#mkt')" style="color:#ffb300;font-weight:700;">⚙️ Đổi Logo & Tiêu Đề</button>
+        <button class="switcher-btn active" id="btnViewLockscreen" onclick="showLockscreen(true)">🔒 Màn Hình Khóa</button>
+        <button class="switcher-btn" id="btnViewClient" onclick="showLockscreen(false); switchIphoneFrame('index.html')">App Khách</button>
+        <button class="switcher-btn" id="btnViewManager" onclick="showLockscreen(false); switchIphoneFrame('admin.html')">Bảng Quản Trị</button>
       </div>
+
+      <!-- Nút bắn lại thông báo Binance -->
+      <button class="switcher-btn" id="btnTriggerNotif" onclick="triggerNativeNotif()" style="background:#f3ba2f;color:#0b0e11;font-weight:700;display:flex;align-items:center;gap:6px;border:none;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+        <span>Bắn Thông Báo</span>
+      </button>
 
       <!-- Bộ chọn thiết bị -->
       <div class="device-switcher">
@@ -79,17 +87,17 @@
           <!-- 1. THANH TRẠNG THÁI IOS (STATUS BAR) -->
           <div class="ios-status-bar">
             <!-- Giờ hiện tại bên trái -->
-            <div class="status-time" id="iosTime">09:41</div>
+            <div class="status-time" id="iosTime">21:55</div>
 
             <!-- DYNAMIC ISLAND TƯƠNG TÁC -->
             <div class="dynamic-island" id="dynamicIsland" title="Chạm để mở rộng Dynamic Island">
               <div class="island-pill">
                 <div class="island-left-item">
                   <span class="island-dot"></span>
-                  <span class="island-text">WFI</span>
+                  <span class="island-text">Binance</span>
                 </div>
                 <div class="island-right-item">
-                  <span class="island-rate">450/d</span>
+                  <span class="island-rate" id="islandSub">Deposit</span>
                   <div class="sound-wave">
                     <span></span><span></span><span></span>
                   </div>
@@ -120,16 +128,71 @@
             </div>
           </div>
 
-          <!-- NỘI DUNG ỨNG DỤNG BÊN TRONG IPHONE (IFRAME CÙNG GỐC) -->
+          <!-- 2. MÀN HÌNH KHÓA IOS 18 & BANNER THÔNG BÁO BINANCE NATIVE -->
+          <div class="lockscreen-view" id="lockscreenView">
+            <!-- Ổ khóa bảo mật iOS -->
+            <div class="lockscreen-padlock">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+              </svg>
+            </div>
+
+            <!-- Ngày & Đồng hồ số lớn phong cách iOS 18 -->
+            <div class="lockscreen-clock-area">
+              <div class="lockscreen-date" id="lockDate">Thứ Năm, 8 tháng 10</div>
+              <div class="lockscreen-clock" id="lockClock">21:55</div>
+            </div>
+
+            <!-- Khu vực thông báo nảy trên màn hình khóa -->
+            <div class="lockscreen-notif-area">
+              <!-- BANNER THÔNG BÁO BINANCE NGUYÊN BẢN (KHÔNG CÓ CHỮ FROM) -->
+              <div class="native-binance-banner" id="binanceBanner" onclick="triggerNativeNotif()" title="Chạm để kích hoạt lại hiệu ứng">
+                <!-- Icon Binance với badge số 2 góc trên -->
+                <div class="native-binance-icon-wrap">
+                  <img src="img/binance_notif_icon_sq.jpg?v=20261008" class="native-binance-icon" alt="Binance">
+                  <span class="native-binance-badge">2</span>
+                </div>
+
+                <!-- Nội dung thông báo -->
+                <div class="native-binance-content">
+                  <div class="native-binance-header">
+                    <span class="native-binance-title" id="bannerTitle" contenteditable="true" spellcheck="false" title="Nhấp đúp để chỉnh sửa trực tiếp">Xử lý tiền gửi USDT</span>
+                    <span class="native-binance-time">bây giờ</span>
+                  </div>
+                  <!-- TUYỆT ĐỐI KHÔNG CÓ DÒNG from Binance -->
+                  <div class="native-binance-body" id="bannerBody" contenteditable="true" spellcheck="false" title="Nhấp đúp để chỉnh sửa trực tiếp">
+                    Khoản tiền gửi 19.090 USDT của bạn hiện đang được xử lý. Nếu bạn không nhận ra hoạt động này, vui lòng liên hệ với chúng tôi ngay lập tức.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hai nút tròn Flashlight và Camera ở đáy -->
+            <div class="lockscreen-footer-actions">
+              <div class="lockscreen-action-btn" title="Đèn pin">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 2h12v3l-4 4v11a2 2 0 0 1-2 2h0a2 2 0 0 1-2-2V9L6 5V2zm2 2v.5l4 4 4-4V4H8zm2 7.5V20h4v-8.5l-2-2-2 2z"/>
+                </svg>
+              </div>
+              <div class="lockscreen-action-btn" title="Máy ảnh">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. NỘI DUNG ỨNG DỤNG BÊN TRONG IPHONE (IFRAME CÙNG GỐC) -->
           <iframe 
             src="index.html?v=20261008_1517" 
             class="app-frame" 
             id="appFrame" 
+            style="display:none;"
             title="Giao diện ứng dụng WFI Mining trên iPhone"
             loading="eager">
           </iframe>
 
-          <!-- 2. VẠCH HOME INDICATOR IOS PHÍA ĐÁY MÀN HÌNH -->
+          <!-- 4. VẠCH HOME INDICATOR IOS PHÍA ĐÁY MÀN HÌNH -->
           <div class="ios-home-indicator-bar">
             <div class="home-indicator"></div>
           </div>
@@ -140,20 +203,95 @@
   </main>
 
   <script>
-    // Cập nhật giờ iOS thực tế
-    function updateIosClock() {
+    // Âm thanh thông báo iOS ding chân thực
+    function playIosDing() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1046.5, ctx.currentTime); // C6
+        osc.frequency.exponentialRampToValueAtTime(1318.5, ctx.currentTime + 0.1); // E6
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.45);
+      } catch (e) {
+        console.warn('Audio note:', e);
+      }
+    }
+
+    // Cập nhật ngày giờ iOS 18 thực tế theo giờ Việt Nam
+    function updateLockscreenClock() {
       const now = new Date();
       let hours = now.getHours();
       let minutes = now.getMinutes();
       hours = hours < 10 ? '0' + hours : hours;
       minutes = minutes < 10 ? '0' + minutes : minutes;
-      const el = document.getElementById('iosTime');
-      if (el) el.textContent = `${hours}:${minutes}`;
+      
+      const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+      const dayName = days[now.getDay()];
+      const dateStr = `${dayName}, ${now.getDate()} tháng ${now.getMonth() + 1}`;
+      
+      const lockDate = document.getElementById('lockDate');
+      const lockClock = document.getElementById('lockClock');
+      const iosTime = document.getElementById('iosTime');
+      
+      if (lockDate) lockDate.textContent = dateStr;
+      if (lockClock) lockClock.textContent = `${hours}:${minutes}`;
+      if (iosTime) iosTime.textContent = `${hours}:${minutes}`;
     }
-    setInterval(updateIosClock, 1000);
-    updateIosClock();
+    setInterval(updateLockscreenClock, 1000);
+    updateLockscreenClock();
 
-    // Chuyển đổi giữa App Khách, Bảng Quản Trị và Cấu Hình MKT
+    // Chuyển đổi giữa Màn hình khóa và Chế độ xem App
+    function showLockscreen(isLock) {
+      const lockView = document.getElementById('lockscreenView');
+      const appFrame = document.getElementById('appFrame');
+      const btnLock = document.getElementById('btnViewLockscreen');
+      const btnClient = document.getElementById('btnViewClient');
+      const btnManager = document.getElementById('btnViewManager');
+      const btnTrigger = document.getElementById('btnTriggerNotif');
+
+      if (isLock) {
+        if (lockView) lockView.classList.remove('hidden');
+        if (appFrame) appFrame.style.display = 'none';
+        btnLock?.classList.add('active');
+        btnClient?.classList.remove('active');
+        btnManager?.classList.remove('active');
+        if (btnTrigger) btnTrigger.style.display = 'flex';
+      } else {
+        if (lockView) lockView.classList.add('hidden');
+        if (appFrame) appFrame.style.display = 'block';
+        btnLock?.classList.remove('active');
+        if (btnTrigger) btnTrigger.style.display = 'none';
+      }
+    }
+
+    // Kích hoạt lại hiệu ứng nảy thông báo Binance Native
+    function triggerNativeNotif() {
+      const banner = document.getElementById('binanceBanner');
+      if (!banner) return;
+      banner.style.animation = 'none';
+      banner.offsetHeight; // trigger reflow
+      banner.style.animation = 'notifSlideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+      playIosDing();
+
+      // Hiệu ứng Dynamic Island nở ra tương tác
+      const island = document.getElementById('dynamicIsland');
+      if (island) {
+        island.classList.add('expanded');
+        setTimeout(() => {
+          island.classList.remove('expanded');
+        }, 2200);
+      }
+    }
+
+    // Chuyển đổi giữa App Khách và Bảng Quản Trị
     function switchIphoneFrame(url) {
       const frame = document.getElementById('appFrame');
       if (frame) {
@@ -166,28 +304,8 @@
       }
       document.getElementById('btnViewClient')?.classList.toggle('active', url.startsWith('index.html'));
       document.getElementById('btnViewManager')?.classList.toggle('active', url === 'admin.html');
-      document.getElementById('btnViewMktConfig')?.classList.toggle('active', url.includes('#mkt'));
       const exitBtn = document.getElementById('btnExitView');
       if (exitBtn) exitBtn.href = url;
-    }
-
-    // Đăng nhập test MKT / Đăng xuất trực tiếp từ thanh công cụ iPhone
-    function quickIphoneAuth(type) {
-      const frame = document.getElementById('appFrame');
-      if (!frame || !frame.contentWindow) return;
-      try {
-        if (type === 'mkt') {
-          if (typeof frame.contentWindow.loginQuickAccount === 'function') {
-            frame.contentWindow.loginQuickAccount('mkt.demo@gmail.com', 'mkt123456');
-          }
-        } else if (type === 'logout') {
-          if (typeof frame.contentWindow.handleAuthLogout === 'function') {
-            frame.contentWindow.handleAuthLogout();
-          }
-        }
-      } catch (e) {
-        console.warn('Iframe auth error:', e);
-      }
     }
 
     // Chuyển đổi kích thước 16 Pro / 16 Pro Max
@@ -206,14 +324,30 @@
     // Dynamic Island tương tác mở rộng
     const island = document.getElementById('dynamicIsland');
     let isExpanded = false;
-    island.addEventListener('click', () => {
-      isExpanded = !isExpanded;
-      if (isExpanded) {
-        island.classList.add('expanded');
-      } else {
-        island.classList.remove('expanded');
+    if (island) {
+      island.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        if (isExpanded) {
+          island.classList.add('expanded');
+        } else {
+          island.classList.remove('expanded');
+        }
+      });
+    }
+
+    // Đồng bộ nội dung thông báo từ Admin hoặc LocalStorage nếu có
+    try {
+      const savedTitle = localStorage.getItem('mkt_notif_title');
+      const savedBody = localStorage.getItem('mkt_notif_body');
+      if (savedTitle && savedTitle.trim()) {
+        const el = document.getElementById('bannerTitle');
+        if (el) el.textContent = savedTitle.trim();
       }
-    });
+      if (savedBody && savedBody.trim()) {
+        const el = document.getElementById('bannerBody');
+        if (el) el.textContent = savedBody.trim();
+      }
+    } catch(e) {}
   </script>
 </body>
 </html>

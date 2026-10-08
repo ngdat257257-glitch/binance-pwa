@@ -434,3 +434,235 @@
     transform: scale(0.78);
   }
 }
+
+/* ==========================================================================
+   MÀN HÌNH KHÓA IOS 18 & BANNER THÔNG BÁO BINANCE NATIVE (KHÔNG CÓ CHỮ FROM)
+   ========================================================================== */
+.lockscreen-view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 55px 20px 30px 20px;
+  background: 
+    radial-gradient(ellipse at 85% 18%, rgba(160, 105, 50, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse at 15% 82%, rgba(100, 65, 35, 0.38) 0%, transparent 60%),
+    linear-gradient(175deg, #1d1b1a 0%, #131110 45%, #080707 100%);
+  z-index: 50;
+  overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lockscreen-view.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Ổ khóa iOS ở trên */
+.lockscreen-padlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.lockscreen-padlock svg {
+  width: 17px;
+  height: 17px;
+  color: rgba(255, 255, 255, 0.7);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Khu vực ngày & giờ phong cách iOS 18 */
+.lockscreen-clock-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  margin-top: 2px;
+}
+
+.lockscreen-date {
+  font-size: 17px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: -0.2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin-bottom: -2px;
+}
+
+.lockscreen-clock {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  color: #ffffff;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Khu vực thông báo ở giữa màn hình khóa */
+.lockscreen-notif-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 26px;
+  gap: 12px;
+}
+
+/* BANNER THÔNG BÁO BINANCE NATIVE (GIỐNG THẬT 100%, KHÔNG CÓ CHỮ FROM) */
+.native-binance-banner {
+  background: rgba(38, 38, 42, 0.72);
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 15px 16px 16px 16px;
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 1px 0 inset rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  color: #ffffff;
+  position: relative;
+  transform-origin: top center;
+  animation: notifSlideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.native-binance-banner:active {
+  transform: scale(0.98);
+}
+
+@keyframes notifSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-25px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Icon Binance với badge số 2 */
+.native-binance-icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-top: 2px;
+}
+
+.native-binance-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  display: block;
+}
+
+.native-binance-badge {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  background: #ffffff;
+  color: #000000;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Nội dung thông báo */
+.native-binance-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.native-binance-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.native-binance-title {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.25px;
+  line-height: 1.25;
+}
+
+.native-binance-time {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.52);
+  font-weight: 400;
+  flex-shrink: 0;
+  letter-spacing: -0.1px;
+}
+
+.native-binance-body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.38;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.15px;
+  word-break: break-word;
+}
+
+/* Hai nút tròn Flashlight và Camera ở đáy màn hình khóa */
+.lockscreen-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 20px 16px;
+}
+
+.lockscreen-action-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(30, 30, 33, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.lockscreen-action-btn:active {
+  transform: scale(0.92);
+  background: rgba(60, 60, 65, 0.9);
+}
+
+.lockscreen-action-btn svg {
+  width: 22px;
+  height: 22px;
+}
