@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>WFI Mining - Khai thác WFI</title>
+  <meta name="description" content="Nền tảng khai thác crypto WFI tối giản, hiện đại và dễ sử dụng.">
+  <meta name="theme-color" content="#08090b">
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- PWA & Apple iOS Web Push Notification Support (Chuẩn Safari PWA) -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="alternate" type="application/json" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WFI">
+  <link rel="apple-touch-icon" href="img/wfi_coin_hero.jpg">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css?v=20261008_1515">
+</head>
+<body>
+
+  <!-- HỆ THỐNG PWA SERVICE WORKER WEB PUSH NOTIFICATION THẬT TRÊN IPHONE -->
+
+  <!-- ==================== KHU VỰC NỘI DUNG 4 TRANG CHÍNH ==================== -->
+  <main class="main-content">
+    <div class="page-container">
+
+      <!-- ====================================================================
+           TRANG 1: TỔNG QUAN (TỐI GIẢN - CHUYÊN NGHIỆP - CÓ ICON SANG TRỌNG)
+           Chỉ tập trung vào:
+           - WFI đang khai thác (số tăng theo thời gian thực)
+           - Tốc độ khai thác / giờ (tính theo tổng tất cả gói sở hữu)
+           - Tốc độ khai thác / ngày (tính theo tổng tất cả gói sở hữu)
+           - Thời gian còn lại đến lần Claim tiếp theo
+           - Nút Claim WFI
+           ==================================================================== -->
+      <section class="page-view active" id="view-overview">
+        <div class="ov-shell">
+
+          <!-- 1. TOP BAR: UID + CẤP ĐỘ | TÀI KHOẢN (ĐĂNG NHẬP / ĐĂNG XUẤT) | NGÔN NGỮ (10 NGÔN NGỮ QUỐC TẾ) -->
+          <div class="ov-topbar">
+            <div class="ov-uid-group">
+              <span class="ov-uid-label">UID:</span>
+              <span class="ov-uid-val mono" id="overviewUid">86392015</span>
+              <span class="ov-level-pill" id="overviewLevel">Cấp 0</span>
+            </div>
+            <button class="ov-lang-btn" id="btnOverviewLang" type="button" aria-label="Ngôn ngữ" title="Chọn ngôn ngữ (10 quốc gia)" onclick="openLangModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span class="ov-lang-code" id="ovLangCode">VI</span>
+            </button>
+          </div>
+
+          <!-- 2. LOGO + SỐ DƯ WFI -->
+          <h1 class="ov-balance-title">
+            <span class="ov-logo-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 6L8.5 17L12 10L15.5 17L19 6" stroke="#00ff88" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="ov-balance-num mono" id="overviewWfiBalance">0</span>
+            <span class="ov-balance-unit">WFI</span>
+          </h1>
+
+          <!-- 3. COIN WFI TRUNG TÂM -->
+          <div class="ov-coin-stage" id="overviewCoinStage">
+            <div class="ov-coin-glow"></div>
+            <img src="img/wfi_coin_hero.jpg" class="ov-coin-img" alt="Đồng WFI" width="520" height="520">
+          </div>
+
+          <!-- 4. KHU VỰC KHAI THÁC + NÚT CLAIM -->
+          <div class="ov-mining-panel" id="overviewMiningPanel">
+            <div class="ov-panel-head">
+              <span class="status-live-chip" id="overviewStatusChip">
+                <span class="live-dot-pulse"></span>
+                <span id="overviewMiningStateText">Đang khai thác</span>
+              </span>
+              <span class="ov-panel-cycle">Chu kỳ 24 giờ</span>
+            </div>
+
+            <div class="ov-mined-label">WFI đang khai thác</div>
+            <div class="ov-mined-value">
+              <span class="mono" id="overviewMinedLive">0,0000</span>
+              <span class="ov-mined-unit">WFI</span>
+            </div>
+
+            <div class="ov-stats-row">
+              <div class="ov-stat">
+                <span class="ov-stat-label">WFI / giờ</span>
+                <span class="ov-stat-val mono" id="overviewLiveHourlyRate">0</span>
+              </div>
+              <div class="ov-stat">
+                <span class="ov-stat-label">WFI / ngày</span>
+                <span class="ov-stat-val mono" id="overviewDailyYield">0</span>
+              </div>
+              <div class="ov-stat">
+                <span class="ov-stat-label">Còn lại</span>
+                <span class="ov-stat-val mono accent" id="claimCountdownText">--:--:--</span>
+              </div>
+            </div>
+
+            <div class="claim-progress-bar-wrap" title="Tiến trình chu kỳ 24 giờ">
+              <div class="claim-progress-bar-fill" id="claimProgressFill" style="width:0%;"></div>
+            </div>
+
+            <button class="btn-claim ov-claim-btn" id="btnClaimWfi" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span id="btnClaimText">Claim WFI</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TRANG 2: GÓI ĐÀO
+           Chỉ hiển thị gói 10 USDT.
+           - Giá: 10 USDT/gói
+           - Chọn số lượng
+           - Tổng tiền
+           - Nút Mua gói
+           - Bên dưới: “Gói của tôi”
+           ==================================================================== -->
+      <!-- ====================================================================
+           TRANG 2: GÓI ĐÀO (CHỈ 1 GÓI ĐÀO DUY NHẤT)
+           - Giá: 10 USDT
+           - Thời gian khai thác: 1 ngày
+           - Sản lượng: 5.000 WFI/ngày
+           - Tốc độ: 208,33 WFI/giờ
+           - Giá trị: 0,5 USDT
+           - Hiển thị rõ: Đang khai thác: 208,33 WFI/giờ với số WFI tăng theo thời gian thực
+           ==================================================================== -->
+      <!-- ====================================================================
+           TRANG 2: GÓI ĐÀO & TÀI KHOẢN (BỐ CỤC THEO ẢNH 2 MẪU)
+           Gộp Gói đào + Tài khoản vào cùng 1 trang:
+           1. Top bar: Logo WFI & Icon ngôn ngữ
+           2. Profile: Avatar, Tên (Nick/Đặng Hùng), UID (413720), Invited by (adm**@**.com), Icon Cài đặt & Chuông
+           3. Current device (Thiết bị khai thác): 3 thẻ Level | Operating hours | Mining Speed (tính theo tổng tất cả gói)
+           4. Gói đào SVIP: Chip vi mạch 3D, Daily Output 5.000 WFI/ngày, Price 10 USDT, Tốc độ 208,33 WFI/giờ, Bộ chọn số lượng, Nút Purchase (Mua gói)
+           5. Tab Upgrade / Gói của tôi & Tiện ích tài khoản (Bảo mật, Giới thiệu, Hỗ trợ, Đăng xuất)
+           ==================================================================== -->
+      <section class="page-view" id="view-packages">
+        <div class="pa-shell">
+
+          <!-- 1. TOP HEADER: LOGO WFI + ICON NGÔN NGỮ + NÚT ĐĂNG XUẤT -->
+          <div class="pa-header-bar">
+            <div class="pa-brand-group">
+              <div class="pa-brand-circle">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M5 6L8.5 17L12 10L15.5 17L19 6" stroke="#00ff88" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="pa-brand-name">WFI</span>
+            </div>
+            <button class="pa-lang-icon-btn" id="btnPaLang" type="button" aria-label="Ngôn ngữ" title="Chọn ngôn ngữ (10 quốc gia)" onclick="openLangModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 2. THẺ PROFILE NGƯỜI DÙNG CHUẨN ẢNH 2 -->
+          <div class="pa-profile-card">
+            <div class="pa-avatar-circle" id="paAvatarCircle">DH</div>
+            <div class="pa-user-meta">
+              <div class="pa-user-name" id="paUserName">Nick</div>
+              <div class="pa-user-uid mono">UID: <span id="paUserUid">86392015</span></div>
+              <div class="pa-user-inviter">Invited by (vip**@**.com)</div>
+            </div>
+            <div class="pa-top-actions">
+              <button class="pa-action-circle-btn" id="btnPaSettingsToggle" type="button" title="Cài đặt & Tiện ích tài khoản" onclick="openPaSettingsModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </button>
+              <button class="pa-action-circle-btn" id="btnPaNotifToggle" type="button" title="Thông báo hệ thống" onclick="showAppNotification('Hiện tại không có thông báo mới nào từ hệ thống khai thác.', 'info', 'Thông báo hệ thống')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. TIÊU ĐỀ: CURRENT DEVICE (THIẾT BỊ KHAI THÁC) -->
+          <div class="pa-section-header">
+            <h3 class="pa-section-heading">Current device</h3>
+          </div>
+
+          <!-- 3 THẺ THIẾT BỊ KHAI THÁC CHUẨN ẢNH 2 -->
+          <div class="pa-device-stats-grid">
+            <!-- Thẻ 1: Level -->
+            <div class="pa-device-card">
+              <div class="pa-card-icon-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="pa-card-body">
+                <span class="pa-card-title">Level</span>
+                <span class="pa-card-val" id="paDeviceLevel">Level 0</span>
+              </div>
+            </div>
+
+            <!-- Thẻ 2: Operating hours -->
+            <div class="pa-device-card">
+              <div class="pa-card-icon-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="pa-card-body">
+                <span class="pa-card-title">Operating hours</span>
+                <span class="pa-card-val mono" id="paDeviceHours">5H</span>
+              </div>
+            </div>
+
+            <!-- Thẻ 3: Mining Speed (tự động cộng tổng tốc độ khai thác) -->
+            <div class="pa-device-card">
+              <div class="pa-card-icon-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <div class="pa-card-body">
+                <span class="pa-card-title">Mining Speed</span>
+                <span class="pa-card-val mono highlight-green" id="packagesLiveMiningSpeed">208,33 WFI/H</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. THẺ GÓI ĐÀO (BỐ CỤC TAB CONG THEO ẢNH 2) -->
+          <div class="pa-package-tabs-card">
+            <!-- Header 2 tab: SVIP và Upgrade / Gói của tôi -->
+            <div class="pa-tabs-nav">
+              <button class="pa-tab-item active" id="btnTabSvip" type="button" onclick="switchPaTab('svip')">
+                <span class="pa-tab-text">SVIP</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pa-tab-doc-svg">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </button>
+              <button class="pa-tab-item" id="btnTabUpgrade" type="button" onclick="switchPaTab('upgrade')">
+                <span class="pa-tab-text">Upgrade / Gói của tôi</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pa-tab-doc-svg">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+
+            <!-- NỘI DUNG TAB 1: SVIP (BỐ CỤC CHUẨN ẢNH 2) -->
+            <div class="pa-tab-panel active" id="paPanelSvip">
+              <div class="pa-svip-row">
+                <!-- Cột trái: Chip vi mạch ASIC 3D -->
+                <div class="pa-chip-col">
+                  <img src="img/mining_chip.jpg" alt="SVIP Mining Chip" class="pa-chip-img" width="120" height="120">
+                </div>
+
+                <!-- Cột phải: Thông số SVIP -->
+                <div class="pa-svip-info-col">
+                  <div class="pa-svip-badge">
+                    <span class="pa-diamond-icon">💎</span>
+                    <span class="pa-badge-name">SVIP</span>
+                  </div>
+
+                  <div class="pa-spec-line">
+                    <span class="pa-spec-k">Daily Output</span>
+                    <span class="pa-spec-v mono highlight-green">5000 WFI</span>
+                  </div>
+
+                  <div class="pa-spec-line">
+                    <span class="pa-spec-k">Price</span>
+                    <span class="pa-spec-v mono">10 USDT</span>
+                  </div>
+
+                  <div class="pa-spec-line">
+                    <span class="pa-spec-k">Tốc độ khai thác</span>
+                    <span class="pa-spec-v mono highlight-green">208,33 WFI/giờ</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Thanh thông tin số dư & Bộ chọn số lượng -->
+              <div class="pa-checkout-box">
+                <div class="pa-avail-balance-line">
+                  <span>Số dư USDT khả dụng:</span>
+                  <span class="mono"><strong id="pkgAvailableUsdt">85,50</strong> USDT</span>
+                </div>
+
+                <div class="pa-quantity-line">
+                  <label for="packageQtyInput">Số lượng gói mua:</label>
+                  <div class="qty-controls">
+                    <button class="qty-btn" id="btnQtyMinus" type="button" aria-label="Giảm 1 gói">-</button>
+                    <input type="number" id="packageQtyInput" value="1" min="1" max="100" class="qty-input">
+                    <button class="qty-btn" id="btnQtyPlus" type="button" aria-label="Tăng 1 gói">+</button>
+                  </div>
+                </div>
+
+                <div class="pa-total-line">
+                  <span>Tổng thanh toán:</span>
+                  <div class="pa-total-price mono">
+                    <span id="packageTotalUsdt">10</span> USDT
+                  </div>
+                </div>
+              </div>
+
+              <!-- NÚT PURCHASE (MUA GÓI) CHUẨN ẢNH 2 -->
+              <button class="btn btn-primary pa-btn-purchase" id="btnBuyPackageConfirm" type="button">
+                <span>Purchase / Mua gói</span>
+              </button>
+            </div>
+
+            <!-- NỘI DUNG TAB 2: UPGRADE / GÓI CỦA TÔI -->
+            <div class="pa-tab-panel" id="paPanelUpgrade">
+              <div class="pa-upgrade-header">
+                <span class="pa-upgrade-title">Gói đào đang vận hành</span>
+                <span class="pa-upgrade-count mono" id="myPackagesCount">1 gói đang chạy</span>
+              </div>
+              <div class="my-packages-list" id="myPackagesList">
+                <!-- Render danh sách gói của người dùng -->
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TRANG 3: VÍ
+           Chỉ hiển thị: WFI, USDT
+           3 chức năng: Nạp | Đổi | Rút
+           Nội dung hiển thị TRỰC TIẾP TRONG TRANG, KHÔNG POPUP.
+           ==================================================================== -->
+      <!-- ====================================================================
+           TRANG 3: VÍ (WALLETS)
+           Thiết kế mới theo bố cục và trải nghiệm của ảnh mẫu:
+           - Phần trên: Tiêu đề "Ví", tổng giá trị tài sản quy đổi sang USDT, số dư WFI & USDT
+           - Khu vực chức năng: 4 nút tròn Nạp | Đổi | Rút | Lịch sử
+           - Khu vực tài sản: Tiêu đề "Tài sản", từng dòng WFI & USDT, bấm để xem chi tiết
+           - Khu vực thao tác trực tiếp: Nạp BEP20, Đổi WFI sang USDT, Rút BEP20, Lịch sử giao dịch
+           ==================================================================== -->
+      <section class="page-view" id="view-wallet">
+        <div class="wallet-shell">
+
+          <!-- 3.0 MÀN HÌNH CHÍNH CỦA VÍ -->
+          <div class="wallet-subview active" id="wallet-sub-main">
+
+            <!-- 1. PHẦN TRÊN: TIÊU ĐỀ VÍ & TỔNG GIÁ TRỊ TÀI SẢN -->
+            <div class="wallet-top-header">
+              <h2 class="wallet-page-title">Ví</h2>
+              <div class="wallet-hero-total-amount">
+                <span class="wallet-total-val mono" id="walletTotalUsdtAmount">86,76</span>
+                <span class="wallet-total-currency">USDT</span>
+              </div>
+
+              <!-- HIỂN THỊ SỐ DƯ WFI VÀ USDT RÕ RÀNG -->
+              <div class="wallet-summary-cards">
+                <div class="wallet-summary-chip">
+                  <span class="chip-dot wfi-dot"></span>
+                  <span class="chip-label">WFI:</span>
+                  <span class="chip-val mono" id="walletWfiAmount">12.580,35</span>
+                  <span class="chip-equiv">(≈ <span id="walletWfiEquivUsdt">1,26</span> U)</span>
+                </div>
+                <div class="wallet-summary-chip">
+                  <span class="chip-dot usdt-dot"></span>
+                  <span class="chip-label">USDT:</span>
+                  <span class="chip-val mono" id="walletUsdtAmount">85,50</span>
+                  <span class="chip-unit">USDT</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. KHU VỰC CHỨC NĂNG: 4 NÚT TRÒN GỌN (NẠP | ĐỔI | RÚT | LỊCH SỬ) -->
+            <div class="wallet-circle-actions-row">
+              <!-- NẠP -->
+              <button type="button" class="wallet-circle-action-item" data-action="deposit" onclick="openWalletSubView('deposit')" id="btnWalletActionDeposit">
+                <div class="circle-btn-ring">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <span class="circle-btn-text">Nạp</span>
+              </button>
+
+              <!-- ĐỔI -->
+              <button type="button" class="wallet-circle-action-item" data-action="swap" onclick="openWalletSubView('swap')" id="btnWalletActionSwap">
+                <div class="circle-btn-ring">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="17 1 21 5 17 9"></polyline>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                    <polyline points="7 23 3 19 7 15"></polyline>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                  </svg>
+                </div>
+                <span class="circle-btn-text">Đổi</span>
+              </button>
+
+              <!-- RÚT -->
+              <button type="button" class="wallet-circle-action-item" data-action="withdraw" onclick="openWalletSubView('withdraw')" id="btnWalletActionWithdraw">
+                <div class="circle-btn-ring">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                  </svg>
+                </div>
+                <span class="circle-btn-text">Rút</span>
+              </button>
+
+              <!-- LỊCH SỬ -->
+              <button type="button" class="wallet-circle-action-item" data-action="history" onclick="openWalletSubView('history')" id="btnWalletActionHistory">
+                <div class="circle-btn-ring">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                  </svg>
+                </div>
+                <span class="circle-btn-text">Lịch sử</span>
+              </button>
+            </div>
+
+            <!-- 3. KHU VỰC TÀI SẢN (BALANCE SECTION) -->
+            <div class="wallet-balance-section">
+              <div class="wallet-section-divider">
+                <span>Tài sản</span>
+              </div>
+
+              <div class="wallet-assets-list">
+                <!-- DÒNG WFI -->
+                <div class="wallet-asset-item-card" id="rowAssetWfi" role="button" tabindex="0">
+                  <div class="asset-item-main">
+                    <div class="asset-icon-box wfi-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 6L8.5 17L12 10L15.5 17L19 6" stroke="#00ff88" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="asset-info-col">
+                      <span class="asset-ticker">WFI</span>
+                      <span class="asset-meta-desc">Token khai thác • 1 WFI = 0,0001 USDT</span>
+                    </div>
+                    <div class="asset-balance-col">
+                      <span class="asset-val mono" id="walletRowWfiVal">12.580,35</span>
+                      <span class="asset-equiv-val mono">≈ <span id="walletRowWfiEquivUsdt">1,26</span> USDT</span>
+                    </div>
+                    <svg class="asset-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+
+                  <!-- Chi tiết WFI xổ xuống khi bấm -->
+                  <div class="asset-dropdown-detail" id="drawerAssetWfi" style="display: none;">
+                    <div class="dropdown-content-grid">
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Số dư khả dụng</span>
+                        <strong class="dd-stat-num mono color-accent" id="drawerWfiAvail">12.580,35 WFI</strong>
+                      </div>
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Giá trị USDT</span>
+                        <strong class="dd-stat-num mono" id="drawerWfiUsdtEquiv">≈ 1,26 USDT</strong>
+                      </div>
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Tốc độ hiện tại</span>
+                        <strong class="dd-stat-num mono color-accent" id="drawerWfiSpeed">208,33 WFI/h</strong>
+                      </div>
+                    </div>
+                    <div class="dropdown-actions-row">
+                      <button type="button" class="btn btn-primary btn-sm" id="btnDrawerGoSwap" onclick="openWalletSubView('swap')">Đổi WFI sang USDT</button>
+                      <button type="button" class="btn btn-secondary btn-sm" id="btnDrawerGoPackages" onclick="navigateTo('packages')">Mua thêm gói đào</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DÒNG USDT -->
+                <div class="wallet-asset-item-card" id="rowAssetUsdt" role="button" tabindex="0">
+                  <div class="asset-item-main">
+                    <div class="asset-icon-box usdt-icon">
+                      <svg viewBox="0 0 32 32">
+                        <circle cx="16" cy="16" r="16" fill="#26A17B"/>
+                        <path fill="#FFF" d="M17.922 17.383c-.05.003-.62.034-1.922.034-1.07 0-1.745-.03-1.89-.033-.04 0-.11 0-.16-.002-3.79-.196-6.61-1.002-6.61-1.983 0-.98 2.82-1.787 6.61-1.983.15-.008.82-.033 1.89-.033 1.3 0 1.87.03 1.92.034 3.79.196 6.61 1.003 6.61 1.983 0 .98-2.82 1.787-6.45 1.983v-.001zm1.92-2.894c-.45-.035-1.21-.067-2.07-.074v-1.74h4.86V9.92H9.368v2.755h4.86v1.74c-.86.007-1.62.04-2.07.074-4.28.344-7.46 1.408-7.46 2.684 0 1.275 3.18 2.34 7.46 2.683.45.035 1.21.068 2.07.075v6.14h3.69v-6.14c.86-.007 1.62-.04 2.07-.075 4.28-.343 7.46-1.408 7.46-2.683 0-1.276-3.18-2.34-7.63-2.684z"/>
+                      </svg>
+                    </div>
+                    <div class="asset-info-col">
+                      <span class="asset-ticker">USDT</span>
+                      <span class="asset-meta-desc">Tether USD • Mạng BEP-20 (BSC)</span>
+                    </div>
+                    <div class="asset-balance-col">
+                      <span class="asset-val mono" id="walletRowUsdtVal">85,50</span>
+                      <span class="asset-equiv-val mono">USDT</span>
+                    </div>
+                    <svg class="asset-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+
+                  <!-- Chi tiết USDT xổ xuống khi bấm -->
+                  <div class="asset-dropdown-detail" id="drawerAssetUsdt" style="display: none;">
+                    <div class="dropdown-content-grid">
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Khả dụng</span>
+                        <strong class="dd-stat-num mono color-accent" id="drawerUsdtAvail">85,50 USDT</strong>
+                      </div>
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Đang chờ duyệt</span>
+                        <strong class="dd-stat-num mono" id="drawerUsdtLocked">0,00 USDT</strong>
+                      </div>
+                      <div class="dropdown-stat-box">
+                        <span class="dd-stat-lbl">Mạng nạp/rút</span>
+                        <strong class="dd-stat-num">BNB Smart Chain (BEP20)</strong>
+                      </div>
+                    </div>
+                    <div class="dropdown-actions-row">
+                      <button type="button" class="btn btn-primary btn-sm" id="btnDrawerGoDeposit" onclick="openWalletSubView('deposit')">Nạp USDT</button>
+                      <button type="button" class="btn btn-secondary btn-sm" id="btnDrawerGoWithdraw" onclick="openWalletSubView('withdraw')">Rút USDT</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3.1 TRANG NẠP USDT (BEP20) - TRANG TRỰC TIẾP, KHÔNG POPUP -->
+          <div class="wallet-subview" id="wallet-sub-deposit">
+            <div class="subview-header">
+              <button type="button" class="btn-subview-back" onclick="openWalletSubView('main')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Quay lại Ví</span>
+              </button>
+              <h3 class="subview-heading">Nạp USDT (BEP20)</h3>
+            </div>
+
+            <div class="panel-inner-card">
+              <div class="deposit-header-row">
+                <div>
+                  <h3 class="panel-heading">Nạp USDT (BEP20)</h3>
+                  <p class="panel-desc">Chuyển USDT qua mạng <strong>BNB Smart Chain (BEP20)</strong> vào ví bên dưới</p>
+                </div>
+                <span class="bep20-badge">Mạng BEP-20</span>
+              </div>
+
+              <div class="bep20-info-alert">
+                <span>Chỉ chuyển <strong>USDT mạng BEP20</strong>. Hệ thống tự động xác thực trên BSC và cộng tiền ngay khi nhập TXID.</span>
+              </div>
+
+              <div class="deposit-qr-wrap">
+                <div class="qr-card">
+                  <img src="img/wallet_qr_bep20.svg" alt="QR Code Ví 0xcb3Fc21Af451e1D51Cd58078F025Dad92595f5BA" class="qr-svg-image">
+                </div>
+                <div class="qr-meta">
+                  <span class="qr-title">Quét mã QR để chuyển USDT</span>
+                  <span class="qr-subtitle">Địa chỉ ví nhận tiền duy nhất</span>
+                </div>
+              </div>
+
+              <div class="inline-form-group">
+                <div class="form-label-row">
+                  <label for="depositAddressText">Địa chỉ ví (BEP20)</label>
+                  <span class="label-tag-bsc">BNB Smart Chain</span>
+                </div>
+                <div class="copy-field-wrap">
+                  <input type="text" id="depositAddressText" value="0xcb3Fc21Af451e1D51Cd58078F025Dad92595f5BA" readonly>
+                  <button type="button" class="btn btn-primary btn-copy-inline" id="btnCopyDepositAddr">
+                    <span>Sao chép</span>
+                  </button>
+                </div>
+                <span class="input-helper">Địa chỉ hợp đồng USDT BSC: <code class="mono-code">0x55d3...7955</code> • Tối thiểu 1 USDT</span>
+              </div>
+
+              <div class="deposit-verify-result" id="depositVerifyResult" style="display: none;"></div>
+
+              <div class="deposit-history-container" id="depositHistoryContainer">
+                <div class="history-head-row">
+                  <span class="history-title">Lịch sử nạp USDT gần đây</span>
+                  <button type="button" class="btn-history-refresh" id="btnRefreshHistory" title="Làm mới lịch sử">
+                    <span>Làm mới</span>
+                  </button>
+                </div>
+                <div class="deposit-history-list" id="depositHistoryList">
+                  <div class="empty-history-text">Đang tải lịch sử giao dịch...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3.2 TRANG ĐỔI WFI → USDT - TRANG TRỰC TIẾP, KHÔNG POPUP -->
+          <div class="wallet-subview" id="wallet-sub-swap">
+            <div class="subview-header">
+              <button type="button" class="btn-subview-back" onclick="openWalletSubView('main')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Quay lại Ví</span>
+              </button>
+              <h3 class="subview-heading">Đổi WFI → USDT</h3>
+            </div>
+
+            <div class="panel-inner-card">
+              <div class="panel-header-simple">
+                <h3 class="panel-heading">Đổi WFI sang USDT</h3>
+              </div>
+
+              <div class="inline-form-group">
+                <div class="form-label-row">
+                  <label for="inputSwapWfi">Số WFI muốn đổi</label>
+                  <button type="button" class="btn-text-max" id="btnSwapMaxAmount">Đổi tất cả</button>
+                </div>
+                <div class="input-with-tag">
+                  <input type="number" id="inputSwapWfi" value="1000" min="1" step="any" placeholder="0">
+                  <span class="tag-unit">WFI</span>
+                </div>
+                <span class="input-helper">Khả dụng: <strong id="swapAvailableWfi">12.580,35</strong> WFI</span>
+              </div>
+
+              <div class="inline-form-group">
+                <label>Số USDT ước tính nhận được</label>
+                <div class="input-with-tag readonly-tag">
+                  <input type="text" id="outputSwapUsdt" value="0,10" readonly>
+                  <span class="tag-unit">USDT</span>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-block btn-lg" id="btnConfirmSwapInline">Xác nhận đổi sang USDT</button>
+            </div>
+          </div>
+
+          <!-- 3.3 TRANG RÚT USDT (BEP20) - TRANG TRỰC TIẾP, KHÔNG POPUP -->
+          <div class="wallet-subview" id="wallet-sub-withdraw">
+            <div class="subview-header">
+              <button type="button" class="btn-subview-back" onclick="openWalletSubView('main')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Quay lại Ví</span>
+              </button>
+              <h3 class="subview-heading">Rút USDT (BEP20)</h3>
+            </div>
+
+            <div class="panel-inner-card">
+              <div class="deposit-header-row">
+                <div>
+                  <h3 class="panel-heading">Rút USDT (BEP20)</h3>
+                  <p class="panel-desc">Rút tiền về ví cá nhân qua mạng <strong>BNB Smart Chain (BEP20)</strong></p>
+                </div>
+                <span class="bep20-badge">Mạng BEP-20</span>
+              </div>
+
+              <div class="bep20-info-alert">
+                <span>Vui lòng kiểm tra kỹ địa chỉ ví nhận <strong>BEP20</strong>. Lệnh sau khi gửi sẽ được khóa số dư và chuyển đến <strong>hệ thống duyệt</strong> để gửi on-chain.</span>
+              </div>
+
+              <div class="inline-form-group">
+                <div class="form-label-row">
+                  <label for="inputWithdrawAddress">Địa chỉ ví nhận (BEP20)</label>
+                  <span class="label-tag-bsc">BNB Smart Chain</span>
+                </div>
+                <div class="txid-input-field">
+                  <input type="text" id="inputWithdrawAddress" class="simple-text-input font-mono" placeholder="Dán địa chỉ ví nhận bắt đầu bằng 0x...">
+                  <button type="button" class="btn-paste-txid" id="btnPasteWithdrawAddr" title="Dán từ bộ nhớ tạm">Dán</button>
+                </div>
+                <span class="input-helper">Địa chỉ nhận phải hỗ trợ token BEP20 (MetaMask, Trust Wallet, Binance...).</span>
+              </div>
+
+              <div class="inline-form-group">
+                <div class="form-label-row">
+                  <label for="inputWithdrawAmount">Số lượng USDT muốn rút</label>
+                  <button type="button" class="btn-text-max" id="btnWithdrawMaxAmount">Rút tất cả</button>
+                </div>
+                <div class="input-with-tag">
+                  <input type="number" id="inputWithdrawAmount" placeholder="Tối thiểu 5" min="5" step="any">
+                  <span class="tag-unit">USDT</span>
+                </div>
+                <div class="withdraw-balance-meta">
+                  <span>Khả dụng: <strong id="withdrawAvailableUsdt">85,50</strong> USDT</span>
+                  <span class="sep">•</span>
+                  <span>Đang chờ duyệt: <strong id="withdrawLockedUsdt" style="color:var(--text-muted)">0,00</strong> USDT</span>
+                </div>
+              </div>
+
+              <div class="fee-inline-bar">
+                <span>Phí mạng: <strong id="withdrawFeeDisplay">1,00 USDT</strong></span>
+                <span>Thực nhận: <strong class="color-green" id="withdrawNetReceive">0,00 USDT</strong></span>
+              </div>
+
+              <button class="btn btn-primary btn-block btn-lg" id="btnConfirmWithdrawInline">
+                <span id="btnWithdrawText">Xác nhận rút tiền</span>
+              </button>
+
+              <div class="deposit-verify-result" id="withdrawResultAlert" style="display: none;"></div>
+
+              <div class="deposit-history-container" id="withdrawHistoryContainer">
+                <div class="history-head-row">
+                  <span class="history-title">Lịch sử rút tiền của tôi</span>
+                  <button type="button" class="btn-history-refresh" id="btnRefreshWithdrawHistory" title="Làm mới lịch sử rút">
+                    <span>Làm mới</span>
+                  </button>
+                </div>
+                <div class="deposit-history-list" id="withdrawHistoryList">
+                  <div class="empty-history-text">Đang tải lịch sử rút tiền...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3.4 TRANG LỊCH SỬ GIAO DỊCH - TRANG TRỰC TIẾP, KHÔNG POPUP -->
+          <div class="wallet-subview" id="wallet-sub-history">
+            <div class="subview-header">
+              <button type="button" class="btn-subview-back" onclick="openWalletSubView('main')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Quay lại Ví</span>
+              </button>
+              <h3 class="subview-heading">Lịch Sử Giao Dịch</h3>
+            </div>
+
+            <div class="panel-inner-card">
+              <div class="history-head-row">
+                <h3 class="panel-heading" style="margin-bottom:0;">Lịch Sử Giao Dịch</h3>
+                <button type="button" class="btn-history-refresh" id="btnRefreshGeneralHistory" title="Làm mới">
+                  <span>Làm mới</span>
+                </button>
+              </div>
+              <p class="panel-desc">Toàn bộ giao dịch Nạp, Đổi, Rút, Mua gói và Nhận thưởng</p>
+
+              <div class="table-responsive">
+                <table class="crm-table" style="background:transparent;width:100%;">
+                  <thead>
+                    <tr>
+                      <th>Loại</th>
+                      <th>Số tiền</th>
+                      <th>Trạng thái</th>
+                      <th style="text-align:right;">Thời gian</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyWalletGeneralHistory">
+                    <!-- Render bởi JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ====================================================================
+           TRANG 5: BẢNG XẾP HẠNG (WEEKLY WFI MINING LEADERBOARD)
+           - Đua Top khai thác WFI trong tuần
+           - Top 1: 1.000 USDT | Top 2: 500 USDT | Top 3: 250 USDT
+           - Đếm ngược thời gian tuần còn lại
+           - Tự động chốt giải & reset về 0 cuối tuần
+           - Dữ liệu thực tế từ hệ thống, không popup
+           ==================================================================== -->
+      <!-- ====================================================================
+           TRANG 5: BẢNG XẾP HẠNG (WEEKLY WFI MINING LEADERBOARD)
+           Thiết kế lại theo bố cục của ảnh mẫu:
+           - Phần trên: Logo/tên WFI bên trái, icon ngôn ngữ bên phải
+           - Lưới 8 chức năng của trang: dạng icon + tên bố cục gọn như ảnh mẫu
+           - Khu vực Bảng xếp hạng: Tiêu đề lớn "Bảng xếp hạng"
+           - Top 3 nổi bật: Top 2 bên trái | Top 1 ở giữa | Top 3 bên phải (Avatar, Huy hiệu NO.1/2/3, Vòng nguyệt quế, Tên/ID, Tổng WFI, Phần thưởng USDT)
+           - Danh sách Top 100 theo từng dòng phẳng, highlight nhẹ dòng của tài khoản hiện tại
+           - Reset tự động khi sang tuần mới, dữ liệu thực tế từ backend
+           ==================================================================== -->
+      <section class="page-view" id="view-leaderboard">
+        <div class="lb-shell">
+
+          <!-- 1. PHẦN TRÊN: LOGO/TÊN WFI BÊN TRÁI & ICON NGÔN NGỮ BÊN PHẢI -->
+          <div class="lb-topbar">
+            <div class="lb-brand-wrap">
+              <div class="lb-brand-logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M5 6L8.5 17L12 10L15.5 17L19 6" stroke="#00ff88" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="lb-brand-name">WFI</span>
+            </div>
+
+            <button class="lb-lang-btn" id="btnLeaderboardLang" type="button" aria-label="Ngôn ngữ" title="Chọn ngôn ngữ (10 quốc gia)" onclick="openLangModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 2. LƯỚI CHỨC NĂNG CỦA TRANG (ICON + TÊN, BỐ CỤC GỌN NHƯ ẢNH MẪU) -->
+          <div class="lb-func-grid">
+            <!-- HÀNG 1 -->
+            <button type="button" class="lb-func-btn" id="btnFuncTeam" onclick="openPaSettingsModal(); openPaAccountSection('referral');" title="Đội nhóm & Hoa hồng 5 cấp">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Đội nhóm</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncFeedback" onclick="openPaSettingsModal(); openPaAccountSection('support');" title="Trung tâm hỗ trợ CSKH & Góp ý">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Góp ý</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncRules" onclick="document.getElementById('lbRulesCardSection')?.scrollIntoView({behavior:'smooth'});" title="Xem quy định & phần thưởng tuần">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Quy tắc</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncRoadmap" onclick="showAppNotification('Lộ trình phát triển WFI Protocol 2.0: Mainnet Q4/2026, Mở rộng BSC Staking Pool, Kết nối mạng lưới đào 20+ Quốc gia.', 'info', 'Lộ trình phát triển')" title="Lộ trình phát triển WFI">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Lộ trình</span>
+            </button>
+
+            <!-- HÀNG 2 -->
+            <button type="button" class="lb-func-btn" id="btnFuncWhitepaper" onclick="showAppNotification('Sách trắng WFI Whitepaper v2.0: Giảm phát Tokenomics, cơ chế đồng thuận PoW + PoS tích hợp và giải ngân thưởng tuần tự động.', 'info', 'Sách trắng WFI Protocol')" title="Sách trắng dự án">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Sách trắng</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncSwap" onclick="navigateTo('wallet'); switchWalletAction('swap');" title="Đổi WFI sang USDT">
+              <div class="func-icon-ring has-badge">
+                <span class="func-badge-new">new</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">WFI&USDT</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncPackages" onclick="navigateTo('packages');" title="Xem Gói đào SVIP">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Gói đào</span>
+            </button>
+
+            <button type="button" class="lb-func-btn" id="btnFuncWallet" onclick="navigateTo('wallet'); switchWalletAction('deposit');" title="Ví nạp USDT">
+              <div class="func-icon-ring">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                  <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+              </div>
+              <span class="func-btn-lbl">Ví nạp</span>
+            </button>
+          </div>
+
+          <!-- 3. TIÊU ĐỀ LỚN: BẢNG XẾP HẠNG (LEADERBOARD) -->
+          <div class="lb-header-center">
+            <h2 class="lb-main-title">Bảng xếp hạng</h2>
+            <div class="lb-title-dash"></div>
+            
+            <!-- ĐỒNG HỒ ĐẾM NGƯỢC THỜI GIAN TUẦN CÒN LẠI -->
+            <div class="lb-timer-pill" id="lbCountdownDisplay">
+              <span class="lb-week-tag" id="lbWeekBadge">Tuần #42</span>
+              <span class="lb-timer-sep">•</span>
+              <span class="lb-timer-text">Còn lại: </span>
+              <span class="lb-clock-val mono">
+                <strong id="lbDays">00</strong>d <strong id="lbHours">00</strong>:<strong id="lbMinutes">00</strong>:<strong id="lbSeconds">00</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- 4. TOP 3 PODIUM NỔI BẬT THEO ĐÚNG ẢNH MẪU (KHUNG TRÒN + NGUYỆT QUẾ + VẦNG HÀO QUANG) -->
+          <div class="lb-podium-section">
+            <div class="lb-podium-grid">
+
+              <!-- TOP 2: BÊN TRÁI (BẠC - 500 USDT) -->
+              <div class="lb-podium-card rank-2">
+                <div class="podium-beam-glow beam-silver"></div>
+                <div class="podium-circle-container">
+                  <div class="podium-badge-tag badge-silver">NO.2</div>
+                  
+                  <div class="podium-circle-wrap ring-silver">
+                    <div class="podium-avatar-face" id="podium2Avatar">HO</div>
+                  </div>
+
+                  <div class="podium-wreath wreath-silver">
+                    <svg viewBox="0 0 120 56" fill="currentColor" class="podium-wreath-svg">
+                      <path d="M60 50 C40 50 20 38 12 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M60 50 C80 50 100 38 108 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M12 16 C9 12 11 6 15 7 C18 8 17 14 12 16Z"/>
+                      <path d="M17 24 C13 20 16 14 20 16 C23 18 22 23 17 24Z"/>
+                      <path d="M25 31 C20 28 22 21 27 23 C30 25 30 30 25 31Z"/>
+                      <path d="M34 38 C29 35 30 29 35 30 C39 32 38 37 34 38Z"/>
+                      <path d="M45 44 C40 42 41 36 46 37 C49 38 49 43 45 44Z"/>
+                      <path d="M16 11 C19 8 24 11 23 15 C21 18 17 15 16 11Z"/>
+                      <path d="M23 18 C27 15 31 19 30 22 C28 25 24 22 23 18Z"/>
+                      <path d="M32 25 C36 23 39 27 38 30 C36 33 32 30 32 25Z"/>
+                      <path d="M42 31 C45 29 48 33 47 36 C45 39 42 36 42 31Z"/>
+                      <path d="M108 16 C111 12 109 6 105 7 C102 8 103 14 108 16Z"/>
+                      <path d="M103 24 C107 20 104 14 100 16 C97 18 98 23 103 24Z"/>
+                      <path d="M95 31 C100 28 98 21 93 23 C90 25 90 30 95 31Z"/>
+                      <path d="M86 38 C91 35 90 29 85 30 C81 32 82 37 86 38Z"/>
+                      <path d="M75 44 C80 42 79 36 74 37 C71 38 71 43 75 44Z"/>
+                      <path d="M104 11 C101 8 96 11 97 15 C99 18 103 15 104 11Z"/>
+                      <path d="M97 18 C93 15 89 19 90 22 C92 25 96 22 97 18Z"/>
+                      <path d="M88 25 C84 23 81 27 82 30 C84 33 88 30 88 25Z"/>
+                      <path d="M78 31 C75 29 72 33 73 36 C75 39 78 36 78 31Z"/>
+                      <circle cx="60" cy="50" r="3.5"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="podium-miner-name" id="podium2Name">Tony032008</div>
+                <div class="podium-miner-wfi mono" id="podium2Wfi">180.000,00 WFI</div>
+                <div class="podium-reward-pill reward-silver">500 USDT</div>
+              </div>
+
+              <!-- TOP 1: Ở GIỮA (VÀNG HOÀNG KIM - 1.000 USDT - LỚN NHẤT & NHÔ CAO) -->
+              <div class="lb-podium-card rank-1">
+                <div class="podium-beam-glow beam-gold"></div>
+                <div class="podium-circle-container">
+                  <div class="podium-badge-tag badge-gold">NO.1</div>
+                  
+                  <div class="podium-circle-wrap ring-gold">
+                    <div class="podium-avatar-face face-gold" id="podium1Avatar">LÊ</div>
+                  </div>
+
+                  <div class="podium-wreath wreath-gold">
+                    <svg viewBox="0 0 120 56" fill="currentColor" class="podium-wreath-svg">
+                      <path d="M60 50 C40 50 20 38 12 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M60 50 C80 50 100 38 108 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M12 16 C9 12 11 6 15 7 C18 8 17 14 12 16Z"/>
+                      <path d="M17 24 C13 20 16 14 20 16 C23 18 22 23 17 24Z"/>
+                      <path d="M25 31 C20 28 22 21 27 23 C30 25 30 30 25 31Z"/>
+                      <path d="M34 38 C29 35 30 29 35 30 C39 32 38 37 34 38Z"/>
+                      <path d="M45 44 C40 42 41 36 46 37 C49 38 49 43 45 44Z"/>
+                      <path d="M16 11 C19 8 24 11 23 15 C21 18 17 15 16 11Z"/>
+                      <path d="M23 18 C27 15 31 19 30 22 C28 25 24 22 23 18Z"/>
+                      <path d="M32 25 C36 23 39 27 38 30 C36 33 32 30 32 25Z"/>
+                      <path d="M42 31 C45 29 48 33 47 36 C45 39 42 36 42 31Z"/>
+                      <path d="M108 16 C111 12 109 6 105 7 C102 8 103 14 108 16Z"/>
+                      <path d="M103 24 C107 20 104 14 100 16 C97 18 98 23 103 24Z"/>
+                      <path d="M95 31 C100 28 98 21 93 23 C90 25 90 30 95 31Z"/>
+                      <path d="M86 38 C91 35 90 29 85 30 C81 32 82 37 86 38Z"/>
+                      <path d="M75 44 C80 42 79 36 74 37 C71 38 71 43 75 44Z"/>
+                      <path d="M104 11 C101 8 96 11 97 15 C99 18 103 15 104 11Z"/>
+                      <path d="M97 18 C93 15 89 19 90 22 C92 25 96 22 97 18Z"/>
+                      <path d="M88 25 C84 23 81 27 82 30 C84 33 88 30 88 25Z"/>
+                      <path d="M78 31 C75 29 72 33 73 36 C75 39 78 36 78 31Z"/>
+                      <circle cx="60" cy="50" r="3.5"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="podium-miner-name text-gold" id="podium1Name">Nhi be</div>
+                <div class="podium-miner-wfi mono" id="podium1Wfi">210.000,00 WFI</div>
+                <div class="podium-reward-pill reward-gold">1.000 USDT</div>
+              </div>
+
+              <!-- TOP 3: BÊN PHẢI (ĐỒNG - 250 USDT) -->
+              <div class="lb-podium-card rank-3">
+                <div class="podium-beam-glow beam-bronze"></div>
+                <div class="podium-circle-container">
+                  <div class="podium-badge-tag badge-bronze">NO.3</div>
+                  
+                  <div class="podium-circle-wrap ring-bronze">
+                    <div class="podium-avatar-face" id="podium3Avatar">NG</div>
+                  </div>
+
+                  <div class="podium-wreath wreath-bronze">
+                    <svg viewBox="0 0 120 56" fill="currentColor" class="podium-wreath-svg">
+                      <path d="M60 50 C40 50 20 38 12 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M60 50 C80 50 100 38 108 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <path d="M12 16 C9 12 11 6 15 7 C18 8 17 14 12 16Z"/>
+                      <path d="M17 24 C13 20 16 14 20 16 C23 18 22 23 17 24Z"/>
+                      <path d="M25 31 C20 28 22 21 27 23 C30 25 30 30 25 31Z"/>
+                      <path d="M34 38 C29 35 30 29 35 30 C39 32 38 37 34 38Z"/>
+                      <path d="M45 44 C40 42 41 36 46 37 C49 38 49 43 45 44Z"/>
+                      <path d="M16 11 C19 8 24 11 23 15 C21 18 17 15 16 11Z"/>
+                      <path d="M23 18 C27 15 31 19 30 22 C28 25 24 22 23 18Z"/>
+                      <path d="M32 25 C36 23 39 27 38 30 C36 33 32 30 32 25Z"/>
+                      <path d="M42 31 C45 29 48 33 47 36 C45 39 42 36 42 31Z"/>
+                      <path d="M108 16 C111 12 109 6 105 7 C102 8 103 14 108 16Z"/>
+                      <path d="M103 24 C107 20 104 14 100 16 C97 18 98 23 103 24Z"/>
+                      <path d="M95 31 C100 28 98 21 93 23 C90 25 90 30 95 31Z"/>
+                      <path d="M86 38 C91 35 90 29 85 30 C81 32 82 37 86 38Z"/>
+                      <path d="M75 44 C80 42 79 36 74 37 C71 38 71 43 75 44Z"/>
+                      <path d="M104 11 C101 8 96 11 97 15 C99 18 103 15 104 11Z"/>
+                      <path d="M97 18 C93 15 89 19 90 22 C92 25 96 22 97 18Z"/>
+                      <path d="M88 25 C84 23 81 27 82 30 C84 33 88 30 88 25Z"/>
+                      <path d="M78 31 C75 29 72 33 73 36 C75 39 78 36 78 31Z"/>
+                      <circle cx="60" cy="50" r="3.5"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="podium-miner-name" id="podium3Name">QuocHung</div>
+                <div class="podium-miner-wfi mono" id="podium3Wfi">120.000,00 WFI</div>
+                <div class="podium-reward-pill reward-bronze">250 USDT</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 5. DÒNG HIGHLIGHT CỦA TÀI KHOẢN HIỆN TẠI (NHƯ DÒNG NICK TRONG ẢNH MẪU) -->
+          <div class="my-current-rank-card" id="myRankBanner">
+            <div class="my-rank-badge-box">
+              <span class="my-rank-num" id="myRankNum">#4</span>
+            </div>
+            <div class="my-rank-avatar-circle">
+              <span>ĐH</span>
+            </div>
+            <div class="my-rank-info">
+              <div class="my-rank-name-row">
+                <span class="my-rank-name">Tài khoản của bạn</span>
+                <span class="my-tag-you">Bạn</span>
+              </div>
+              <span class="my-rank-sub" id="myRankSubText">Bạn đang ở Hạng #4 trong tuần này</span>
+            </div>
+            <div class="my-rank-score mono" id="myMinedWfi">1.350,00 WFI</div>
+          </div>
+
+          <!-- 6. PHẦN DANH SÁCH TOP 100 THEO TỪNG DÒNG PHẲNG -->
+          <div class="lb-list-container">
+            <div class="lb-list-head-toolbar">
+              <span class="lb-list-title">Danh Sách Xếp Hạng Top 100</span>
+              <div class="lb-search-wrap">
+                <input type="text" id="inputSearchLeaderboard" placeholder="Tìm tên, ID hoặc đội thợ đào..." class="lb-search-input">
+              </div>
+            </div>
+
+            <!-- DANH SÁCH CÁC HÀNG FLAT (RENDER BỞI JS) -->
+            <div class="lb-flat-rows-list" id="tbodyLeaderboardTop10">
+              <!-- Render tự động bởi JS -->
+            </div>
+          </div>
+
+          <!-- 7. QUY ĐỊNH PHẦN THƯỞNG -->
+          <div class="lb-rules-card" id="lbRulesCardSection">
+            <div class="lb-rules-title">
+              <span>Quy định & Phần thưởng tuần</span>
+            </div>
+            <ul class="lb-rules-list">
+              <li>Thứ hạng tính theo <strong>tổng WFI khai thác thực tế</strong> của tài khoản trong tuần.</li>
+              <li>Hệ thống <strong>tự động chốt kết quả và trao thưởng</strong> lúc 23:59:59 Chủ Nhật hàng tuần:</li>
+              <li style="color:#facc15;">🥇 Top 1: <strong>1.000 USDT</strong> cộng trực tiếp vào ví</li>
+              <li style="color:#cbd5e1;">🥈 Top 2: <strong>500 USDT</strong> cộng trực tiếp vào ví</li>
+              <li style="color:#fbbf24;">🥉 Top 3: <strong>250 USDT</strong> cộng trực tiếp vào ví</li>
+              <li>Sau khi trao thưởng, bảng xếp hạng <strong>tự động reset về 0</strong> để toàn bộ thợ đào bắt đầu tuần thi đua mới công bằng.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ====================================================================
+           TRANG 4: TÀI KHOẢN
+           Gồm 5 mục:
+           1. Thông tin cá nhân
+           2. Bảo mật
+           3. Giới thiệu
+           4. Hỗ trợ
+           5. Đăng xuất
+           Chuyển trực tiếp nội dung trong cùng giao diện, có nút Quay lại, không popup.
+           ==================================================================== -->
+            <!-- ====================================================================
+           TRANG 4: VÒNG QUAY MAY MẮN (BỐ CỤC THEO ẢNH 1 MẪU - LUCKY DRAW)
+           Thay thế cho trang Tài khoản cũ.
+           - Tiêu đề: Lucky Draw
+           - Vòng quay lớn 6 ô ở trung tâm (30.00, 0.00, 5.00, 10.00, 15.00, 20.00 WFI)
+           - Nút GO ở giữa + Kim chỉ hướng lên
+           - Số lượt quay còn lại: Remaining times: X
+           - Nút Quay / Mua lượt quay (Buy)
+           - Ticker trúng thưởng: DA*BN@393... Draw in + 15.00 WFI
+           - Lịch sử trúng thưởng (Lottery record)
+           - Giữ 100% theme, font, màu sắc xanh neon & đen sâu của WFI, không dùng màu vàng/be ảnh mẫu.
+           ==================================================================== -->
+      <section class="page-view" id="view-wheel">
+        <div class="wheel-shell">
+
+          <!-- 1. TIÊU ĐỀ: LUCKY DRAW -->
+          <div class="wheel-header">
+            <h2 class="wheel-title">Lucky Draw</h2>
+            <p class="wheel-sub">Vòng quay may mắn – Nhận thưởng WFI mỗi ngày</p>
+          </div>
+
+          <!-- 2. KHU VỰC VÒNG QUAY LỚN TRUNG TÂM -->
+          <div class="wheel-stage-container">
+            <div class="wheel-outer-ring">
+              <!-- Đĩa quay SVG 6 ô chuẩn theo Ảnh 1 -->
+              <div class="wheel-disc-wrap" id="wheelDisc">
+                <svg viewBox="0 0 360 360" class="wheel-svg" id="wheelSvg">
+                  <defs>
+                    <radialGradient id="wheelBgGrad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#141a24"/>
+                      <stop offset="90%" stop-color="#0c0f14"/>
+                      <stop offset="100%" stop-color="#06080b"/>
+                    </radialGradient>
+                    <linearGradient id="sectorGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#131822"/>
+                      <stop offset="100%" stop-color="#0e1219"/>
+                    </linearGradient>
+                    <linearGradient id="sectorGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#1a2230"/>
+                      <stop offset="100%" stop-color="#121721"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Nền ngoài đĩa quay -->
+                  <circle cx="180" cy="180" r="176" fill="url(#wheelBgGrad)" stroke="#1e293b" stroke-width="4"/>
+                  <circle cx="180" cy="180" r="172" fill="none" stroke="rgba(0, 255, 136, 0.25)" stroke-width="2"/>
+
+                  <!-- 6 LÁT CẮT (60 ĐỘ MỖI LÁT) - XẾP THEO THỨ TỰ ẢNH 1 -->
+                  <!-- Lát 0: 30.00 WFI (-60° -> 0°, tâm 330°) -->
+                  <path d="M180,180 L26.8,91.6 A176,176 0 0,1 180,4 Z" fill="url(#sectorGrad1)" stroke="#1e293b" stroke-width="1.5"/>
+                  <!-- Lát 1: 0.00 WFI (0° -> 60°, tâm 30°) -->
+                  <path d="M180,180 L180,4 A176,176 0 0,1 332.4,91.6 Z" fill="url(#sectorGrad2)" stroke="#1e293b" stroke-width="1.5"/>
+                  <!-- Lát 2: 5.00 WFI (60° -> 120°, tâm 90°) -->
+                  <path d="M180,180 L332.4,91.6 A176,176 0 0,1 332.4,268.4 Z" fill="url(#sectorGrad1)" stroke="#1e293b" stroke-width="1.5"/>
+                  <!-- Lát 3: 10.00 WFI (120° -> 180°, tâm 150°) -->
+                  <path d="M180,180 L332.4,268.4 A176,176 0 0,1 180,356 Z" fill="url(#sectorGrad2)" stroke="#1e293b" stroke-width="1.5"/>
+                  <!-- Lát 4: 15.00 WFI (180° -> 240°, tâm 210°) -->
+                  <path d="M180,180 L180,356 A176,176 0 0,1 27.6,268.4 Z" fill="url(#sectorGrad1)" stroke="#1e293b" stroke-width="1.5"/>
+                  <!-- Lát 5: 20.00 WFI (240° -> 300°, tâm 270°) -->
+                  <path d="M180,180 L27.6,268.4 A176,176 0 0,1 27.6,91.6 Z" fill="url(#sectorGrad2)" stroke="#1e293b" stroke-width="1.5"/>
+
+                  <!-- CHỮ VÀ SỐ THƯỞNG 6 Ô THEO ẢNH 1 -->
+                  <!-- Ô 0: 30.00 WFI -->
+                  <g transform="rotate(330 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#00ff88" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">30.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                  <!-- Ô 1: 0.00 WFI -->
+                  <g transform="rotate(30 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">0.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#64748b" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                  <!-- Ô 2: 5.00 WFI -->
+                  <g transform="rotate(90 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#38bdf8" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">5.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                  <!-- Ô 3: 10.00 WFI -->
+                  <g transform="rotate(150 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#00ff88" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">10.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                  <!-- Ô 4: 15.00 WFI -->
+                  <g transform="rotate(210 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#facc15" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">15.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                  <!-- Ô 5: 20.00 WFI -->
+                  <g transform="rotate(270 180 180) translate(180 64)">
+                    <text x="0" y="-8" text-anchor="middle" fill="#a855f7" font-size="17" font-weight="800" font-family="'JetBrains Mono', monospace">20.00</text>
+                    <text x="0" y="11" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">WFI</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- TRUNG TÂM: NÚT GO + KIM CHỈ HƯỚNG LÊN (CÓ ĐÈN NEON) -->
+              <div class="wheel-center-pointer" id="wheelCenterPointer">
+                <!-- Kim nhọn tam giác chỉ hướng lên -->
+                <div class="wheel-needle"></div>
+                <!-- Nút bấm GO tròn đỏ nổi bật chuẩn ảnh 1 -->
+                <button class="wheel-go-btn" id="btnWheelGo" type="button" aria-label="Quay">
+                  <span class="go-text">GO</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. HIỂN THỊ SỐ LƯỢT QUAY CÒN LẠI (Remaining times: X) -->
+          <div class="wheel-remaining-box">
+            <span class="wheel-rem-label">Remaining times:</span>
+            <span class="wheel-rem-count mono" id="wheelRemainingCount">3</span>
+          </div>
+
+          <!-- 4. NÚT QUAY / MUA LƯỢT (BUY) -->
+          <div class="wheel-actions-wrap">
+            <button class="btn btn-primary wheel-primary-btn" id="btnWheelSpinMain" type="button">
+              <span>Quay thưởng ngay</span>
+            </button>
+            <button class="btn btn-secondary wheel-buy-btn" id="btnWheelBuySpins" type="button">
+              <span>Mua thêm 3 lượt (1.0 USDT)</span>
+            </button>
+          </div>
+
+          <!-- 5. TICKER TIN NGƯỜI TRÚNG GẦN NHẤT CHUẨN ẢNH 1 -->
+          <div class="wheel-winner-ticker">
+            <div class="wheel-ticker-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="wheel-ticker-line">
+              <span class="wheel-winner-user mono" id="wheelTickerUser">DA*BN@393...</span>
+              <span class="wheel-ticker-verb">Draw in</span>
+              <span class="wheel-winner-amt mono highlight-green" id="wheelTickerAmount">+ 15.00 WFI</span>
+            </div>
+          </div>
+
+
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== THANH ĐIỀU HƯỚNG DƯỚI (MOBILE 5 TRANG CHUẨN) ==================== -->
+  <nav class="bottom-nav-mobile" aria-label="Điều hướng điện thoại">
+    <button class="mob-tab-btn active" data-target="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+      </svg>
+      <span>Tổng quan</span>
+    </button>
+    <button class="mob-tab-btn" data-target="packages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+      </svg>
+      <span>Gói & TK</span>
+    </button>
+    <button class="mob-tab-btn" data-target="wallet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path>
+        <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path>
+        <circle cx="18" cy="14" r="1.5" fill="currentColor"></circle>
+      </svg>
+      <span>Ví</span>
+    </button>
+    <button class="mob-tab-btn" data-target="wheel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9"></circle>
+        <circle cx="12" cy="12" r="2.5"></circle>
+        <path d="M12 3v6.5M12 14.5V21M3 12h6.5M14.5 12H21M5.6 5.6l4.6 4.6M13.8 13.8l4.6 4.6M5.6 18.4l4.6-4.6M13.8 10.2l4.6-4.6"></path>
+      </svg>
+      <span>Vòng quay</span>
+    </button>
+    <button class="mob-tab-btn" data-target="leaderboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+        <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+        <path d="M4 22h16"></path>
+        <path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"></path>
+        <path d="M18 14.66V17c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2.34"></path>
+        <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"></path>
+      </svg>
+      <span>Xếp hạng</span>
+    </button>
+  </nav>
+
+  <!-- MODAL CÀI ĐẶT & TIỆN ÍCH TÀI KHOẢN (MỞ KHI BẤM NÚT CÀI ĐẶT GẦN DH NICK) -->
+  <div class="pa-settings-modal-backdrop" id="paSettingsModalBackdrop" style="display:none;" onclick="closePaSettingsModal(event)">
+    <div class="pa-settings-modal-sheet" onclick="event.stopPropagation()">
+      <div class="pa-settings-modal-header">
+        <div class="pa-settings-header-info">
+          <h4 class="pa-settings-title" id="paSettingsModalTitle">Cài đặt & Tiện ích tài khoản</h4>
+          <span class="pa-settings-subtitle" id="paSettingsModalSubtitle">Quản lý bảo mật, hoa hồng và hỗ trợ 24/7</span>
+        </div>
+        <button type="button" class="pa-settings-close-btn" onclick="closePaSettingsModal()" aria-label="Đóng cài đặt">✕</button>
+      </div>
+
+      <!-- 1. Danh sách menu chính Cài đặt -->
+      <div class="pa-settings-modal-body" id="paSettingsMainBody">
+        <div class="pa-util-menu-grid">
+          <button class="pa-util-item" type="button" onclick="openPaAccountSection('profile')">
+            <div class="pa-util-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name">Thông tin cá nhân</span>
+              <span class="pa-util-desc">UID, email, số điện thoại</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <button class="pa-util-item" type="button" onclick="openPaAccountSection('security')">
+            <div class="pa-util-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name">Bảo mật</span>
+              <span class="pa-util-desc">Đổi mật khẩu, Xác thực 2 bước (2FA)</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <button class="pa-util-item" type="button" onclick="openPaAccountSection('referral')">
+            <div class="pa-util-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name">Giới thiệu & Hoa hồng</span>
+              <span class="pa-util-desc">Mã mời: WFI-8899 • Hoa hồng 5 cấp</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <button class="pa-util-item" type="button" onclick="openPaAccountSection('support')">
+            <div class="pa-util-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name">Trung tâm hỗ trợ</span>
+              <span class="pa-util-desc">Telegram CSKH & Gửi phản hồi</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <!-- NÚT BẬT THÔNG BÁO PWA WEB PUSH TRÊN IPHONE (CHỈ HIỂN THỊ KHI TÀI KHOẢN LÀ MKT) -->
+          <button class="pa-util-item" id="btnMktNotifItem" type="button" onclick="requestSystemNotificationPermission()" style="display:none;">
+            <div class="pa-util-icon" style="background:rgba(0, 255, 136, 0.15);color:#00ff88;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name">🔔 Thông báo Push (iPhone / PWA)</span>
+              <span class="pa-util-desc" id="lblNotifStatus">Bấm để cấp quyền nhận thông báo iPhone thật</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <!-- NÚT ĐĂNG NHẬP / CHUYỂN TÀI KHOẢN HOẶC KHÁCH HÀNG -->
+          <button class="pa-util-item" type="button" onclick="openAuthLoginModal()">
+            <div class="pa-util-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name" id="authMenuLoginText">Đăng nhập / Đổi tài khoản</span>
+              <span class="pa-util-desc" id="authMenuLoginDesc">Đăng nhập tài khoản Khách hàng hoặc MKT</span>
+            </div>
+            <span class="pa-chevron">›</span>
+          </button>
+
+          <!-- NÚT ĐĂNG XUẤT TÀI KHOẢN RÕ RÀNG (BẤM LÀ ĐĂNG XUẤT VỀ KHÁCH HÀNG THƯỜNG NGAY) -->
+          <button class="pa-util-item" id="btnSettingsDirectLogout" type="button" onclick="handleAuthLogout()" style="border:1px solid rgba(239, 68, 68, 0.3);background:rgba(239, 68, 68, 0.08);margin-top:6px;">
+            <div class="pa-util-icon" style="background:rgba(239, 68, 68, 0.15);color:#ef4444;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </div>
+            <div class="pa-util-texts">
+              <span class="pa-util-name" style="color:#ef4444;font-weight:700;">Đăng xuất tài khoản</span>
+              <span class="pa-util-desc" style="color:#f87171;">Xóa phiên đăng nhập, về lại Khách hàng thường</span>
+            </div>
+            <span class="pa-chevron" style="color:#ef4444;">›</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Khu vực chi tiết (mở trực tiếp trong modal khi bấm từng mục) -->
+      <div class="pa-subview-container" id="paSubviewsContainer" style="display:none;padding:14px 16px;overflow-y:auto;">
+        <!-- 1. Profile -->
+        <div class="pa-acc-sub-card" id="pa-acc-sub-profile" style="display:none;">
+          <div class="pa-sub-head-row">
+            <h5>Thông tin cá nhân</h5>
+            <button type="button" class="pa-close-sub-btn" onclick="backToSettingsMenu()">← Quay lại</button>
+          </div>
+          <div class="pa-sub-content">
+            <div class="profile-avatar-row">
+              <div class="profile-avatar-large" id="profileAvatarLarge">DH</div>
+              <div class="profile-avatar-meta">
+                <span class="profile-name-display" id="profileDisplayName">Nick (Đặng Hùng)</span>
+                <span class="profile-status-pill">Đã xác minh</span>
+              </div>
+            </div>
+            <div class="inline-form-group" style="margin-top:12px;">
+              <label>UID tài khoản:</label>
+              <input type="text" class="simple-text-input mono" value="86392015" readonly>
+            </div>
+            <div class="inline-form-group">
+              <label>Email:</label>
+              <input type="email" class="simple-text-input" id="inputProfileEmail" value="danghung.crypto@gmail.com" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Security -->
+        <div class="pa-acc-sub-card" id="pa-acc-sub-security" style="display:none;">
+          <div class="pa-sub-head-row">
+            <h5>Bảo mật & 2FA</h5>
+            <button type="button" class="pa-close-sub-btn" onclick="backToSettingsMenu()">← Quay lại</button>
+          </div>
+          <div class="pa-sub-content">
+            <div class="security-2fa-block">
+              <div class="twofa-texts">
+                <span class="block-title">Xác thực 2 bước (2FA)</span>
+                <span class="block-desc">Bảo vệ giao dịch rút tiền USDT</span>
+              </div>
+              <label class="switch-toggle" for="toggle2FA">
+                <input type="checkbox" id="toggle2FA" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Referral -->
+        <div class="pa-acc-sub-card" id="pa-acc-sub-referral" style="display:none;">
+          <div class="pa-sub-head-row">
+            <h5>Chương trình giới thiệu & Hoa hồng 5 cấp</h5>
+            <button type="button" class="pa-close-sub-btn" onclick="backToSettingsMenu()">← Quay lại</button>
+          </div>
+          <div class="pa-sub-content">
+            <div class="inline-form-group">
+              <label>Mã giới thiệu của bạn:</label>
+              <div class="copy-field-wrap">
+                <input type="text" id="refCodeInput" value="WFI-8899" readonly>
+                <button class="btn btn-secondary btn-copy-inline" id="btnCopyRefCode" type="button">Sao chép</button>
+              </div>
+            </div>
+            <div class="inline-form-group">
+              <label>Liên kết mời:</label>
+              <div class="copy-field-wrap">
+                <input type="text" id="refLinkInput" value="https://wfi.mining/ref/WFI-8899" readonly>
+                <button class="btn btn-secondary btn-copy-inline" id="btnCopyRefLink" type="button">Sao chép</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Support -->
+        <div class="pa-acc-sub-card" id="pa-acc-sub-support" style="display:none;">
+          <div class="pa-sub-head-row">
+            <h5>Trung tâm hỗ trợ CSKH 24/7</h5>
+            <button type="button" class="pa-close-sub-btn" onclick="backToSettingsMenu()">← Quay lại</button>
+          </div>
+          <div class="pa-sub-content">
+            <div class="support-channels-list">
+              <div class="support-channel-item">
+                <div class="channel-texts">
+                  <span class="channel-name">Telegram CSKH: @wfi_support_vn</span>
+                </div>
+                <button class="btn-channel-action" id="btnCopyTelegram" type="button">Sao chép</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CHỌN 10 NGÔN NGỮ QUỐC TẾ -->
+  <div class="lang-modal-backdrop" id="langModalBackdrop" style="display:none;" onclick="closeLangModal(event)">
+    <div class="lang-modal-sheet" onclick="event.stopPropagation()">
+      <div class="lang-modal-header">
+        <div class="lang-modal-title-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lang-modal-icon">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <div>
+            <h4 class="lang-modal-title">Ngôn ngữ / Language</h4>
+            <span class="lang-modal-subtitle">Tích hợp 10 quốc gia phổ biến</span>
+          </div>
+        </div>
+        <button type="button" class="lang-modal-close" onclick="closeLangModal()" aria-label="Đóng">✕</button>
+      </div>
+
+      <div class="lang-list-grid" id="langListGrid">
+        <!-- Danh sách 10 ngôn ngữ được render qua script -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOÀN BỘ THÔNG BÁO NỔI TRONG APP WFI: CHIẾM 1/3 CHIỀU CAO MÀN HÌNH - GIỮ NGUYÊN KHÔNG TỰ BIẾN MẤT - CÓ NÚT ĐÓNG RÕ RÀNG -->
+  <div class="wfi-notify-overlay" id="wfiNotifyOverlay" style="display:none;">
+    <div class="wfi-notify-backdrop" onclick="closeAppNotification()"></div>
+    <div class="wfi-notify-sheet" id="wfiNotifySheet">
+      <!-- Header trạng thái & nút tắt góc -->
+      <div class="wfi-notify-header">
+        <div class="wfi-notify-status-badge" id="wfiNotifyStatusBadge">
+          <span class="wfi-notify-status-dot"></span>
+          <span id="wfiNotifyStatusText">Thông báo hệ thống</span>
+        </div>
+        <button type="button" class="wfi-notify-corner-close" onclick="closeAppNotification()" aria-label="Đóng thông báo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Thân thông báo: Chiếm 1/3 màn hình, cuộn mượt nếu dài -->
+      <div class="wfi-notify-body">
+        <div class="wfi-notify-icon-row">
+          <div class="wfi-notify-avatar" id="wfiNotifyAvatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="wfi-notify-headings">
+            <h4 class="wfi-notify-title" id="wfiNotifyTitle">Thông báo WFI</h4>
+            <span class="wfi-notify-time" id="wfiNotifyTime">Vừa xong</span>
+          </div>
+        </div>
+        <div class="wfi-notify-content" id="wfiNotifyContent">
+          Nội dung thông báo chi tiết
+        </div>
+      </div>
+
+      <!-- Nút Đóng rõ ràng cho khách chủ động bấm tắt -->
+      <div class="wfi-notify-footer">
+        <button type="button" class="wfi-notify-btn-close" id="wfiNotifyBtnClose" onclick="closeAppNotification()">
+          <span>Đóng thông báo</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-tray" id="toastTray" aria-live="polite" style="display:none;"></div>
+
+  <!-- SCRIPT ĐIỀU HƯỚNG CỐT LÕI (INLINE - ĐẢM BẢO HOẠT ĐỘNG 100% KỂ CẢ KHI CÓ CACHE FILE) -->
+  <script>
+    // Hàm chuyển 4 trang chính
+    window.navigateTo = function(targetId) {
+      document.querySelectorAll('.page-view').forEach(function(view) {
+        view.classList.remove('active');
+      });
+      var activeView = document.getElementById('view-' + targetId);
+      if (activeView) activeView.classList.add('active');
+
+      document.querySelectorAll('.nav-btn, .mob-tab-btn').forEach(function(btn) {
+        if (btn.getAttribute('data-target') === targetId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Hàm chuyển sang trang con của Tài khoản (profile, security, referral, support, logout)
+    window.openAccountSubView = function(subId) {
+      document.querySelectorAll('.account-subview').forEach(function(view) {
+        view.classList.remove('active');
+      });
+      var target = document.getElementById('account-sub-' + subId);
+      if (target) {
+        target.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Hàm quay lại menu chính của Tài khoản
+    window.backToAccountMenu = function() {
+      document.querySelectorAll('.account-subview').forEach(function(view) {
+        view.classList.remove('active');
+      });
+      var mainMenu = document.getElementById('account-main-menu');
+      if (mainMenu) {
+        mainMenu.classList.add('active');
+      }
+      var logoutConfirm = document.getElementById('logoutConfirmPanel');
+      var logoutSuccess = document.getElementById('logoutSuccessPanel');
+      if (logoutConfirm) logoutConfirm.style.display = 'flex';
+      if (logoutSuccess) logoutSuccess.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Hàm chuyển trực tiếp giữa các trang con trong Ví (deposit, swap, withdraw, history, main) - Không popup
+    window.openWalletSubView = function(subId) {
+      if (!subId) subId = 'main';
+      document.querySelectorAll('.wallet-subview').forEach(function(view) {
+        view.classList.remove('active');
+      });
+      var target = document.getElementById('wallet-sub-' + subId);
+      if (target) {
+        target.classList.add('active');
+      } else {
+        var main = document.getElementById('wallet-sub-main');
+        if (main) main.classList.add('active');
+      }
+
+      document.querySelectorAll('.wallet-circle-action-item').forEach(function(b) {
+        if (b.getAttribute('data-action') === subId) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+
+      if (window.onWalletSubViewOpened) {
+        window.onWalletSubViewOpened(subId);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Chuyển tab trong Gói đào (SVIP | Upgrade)
+    window.switchPaTab = function(tabId) {
+      document.querySelectorAll('.pa-tab-item').forEach(function(btn) { btn.classList.remove('active'); });
+      document.querySelectorAll('.pa-tab-panel').forEach(function(panel) { panel.classList.remove('active'); });
+      if (tabId === 'svip') {
+        var btn = document.getElementById('btnTabSvip');
+        var panel = document.getElementById('paPanelSvip');
+        if (btn) btn.classList.add('active');
+        if (panel) panel.classList.add('active');
+      } else {
+        var btn = document.getElementById('btnTabUpgrade');
+        var panel = document.getElementById('paPanelUpgrade');
+        if (btn) btn.classList.add('active');
+        if (panel) panel.classList.add('active');
+      }
+    };
+
+    // Mở & Quản lý Modal Cài đặt & Tiện ích tài khoản (bấm nút cài đặt gần DH Nick)
+    window.openPaSettingsModal = function() {
+      var modal = document.getElementById('paSettingsModalBackdrop');
+      if (modal) {
+        window.backToSettingsMenu();
+        modal.style.display = 'flex';
+      }
+    };
+
+    window.closePaSettingsModal = function(e) {
+      if (e && e.target && e.target.id !== 'paSettingsModalBackdrop' && !e.target.classList.contains('pa-settings-close-btn')) return;
+      var modal = document.getElementById('paSettingsModalBackdrop');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.openPaAccountSection = function(secId) {
+      var menu = document.getElementById('paSettingsMainBody');
+      var container = document.getElementById('paSubviewsContainer');
+      if (menu) menu.style.display = 'none';
+      if (container) container.style.display = 'block';
+      document.querySelectorAll('.pa-acc-sub-card').forEach(function(c) { c.style.display = 'none'; });
+      var target = document.getElementById('pa-acc-sub-' + secId);
+      if (target) {
+        target.style.display = 'block';
+      }
+    };
+
+    window.backToSettingsMenu = function() {
+      var menu = document.getElementById('paSettingsMainBody');
+      var container = document.getElementById('paSubviewsContainer');
+      if (menu) menu.style.display = 'block';
+      if (container) container.style.display = 'none';
+      document.querySelectorAll('.pa-acc-sub-card').forEach(function(c) { c.style.display = 'none'; });
+    };
+
+    window.closePaAccountSection = function() {
+      window.backToSettingsMenu();
+    };
+
+    window.switchWalletAction = function(action) {
+      window.openWalletSubView(action);
+    };
+
+    // 10 Ngôn ngữ quốc tế tích hợp
+    window.WFI_LANGUAGES = [
+      { code: 'VI', name: 'Tiếng Việt', native: 'Tiếng Việt', flag: '🇻🇳', desc: 'Việt Nam' },
+      { code: 'EN', name: 'English', native: 'English', flag: '🇺🇸', desc: 'United States / Global' },
+      { code: 'ZH', name: 'Chinese', native: '简体中文', flag: '🇨🇳', desc: '中国 (China)' },
+      { code: 'JA', name: 'Japanese', native: '日本語', flag: '🇯🇵', desc: '日本 (Japan)' },
+      { code: 'KO', name: 'Korean', native: '한국어', flag: '🇰🇷', desc: '대한민국 (Korea)' },
+      { code: 'RU', name: 'Russian', native: 'Русский', flag: '🇷🇺', desc: 'Россия (Russia)' },
+      { code: 'ES', name: 'Spanish', native: 'Español', flag: '🇪🇸', desc: 'España / Latinoamérica' },
+      { code: 'FR', name: 'French', native: 'Français', flag: '🇫🇷', desc: 'France' },
+      { code: 'DE', name: 'German', native: 'Deutsch', flag: '🇩🇪', desc: 'Deutschland' },
+      { code: 'TH', name: 'Thai', native: 'ภาษาไทย', flag: '🇹🇭', desc: 'ประเทศไทย (Thailand)' }
+    ];
+
+    window.openLangModal = function() {
+      var grid = document.getElementById('langListGrid');
+      var modal = document.getElementById('langModalBackdrop');
+      if (!modal || !grid) return;
+      var curLang = localStorage.getItem('wfi_lang') || 'VI';
+
+      grid.innerHTML = window.WFI_LANGUAGES.map(function(l) {
+        var isActive = l.code === curLang;
+        return '<div class="lang-item-row ' + (isActive ? 'is-active' : '') + '" onclick="selectLanguage(\'' + l.code + '\')">' +
+          '<div class="lang-item-left">' +
+            '<span class="lang-item-flag">' + l.flag + '</span>' +
+            '<div class="lang-item-names">' +
+              '<span class="lang-item-native">' + l.native + '</span>' +
+              '<span class="lang-item-sub">' + l.desc + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="lang-item-right">' +
+            '<span class="lang-code-pill">' + l.code + '</span>' +
+            '<svg class="lang-item-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      modal.style.display = 'flex';
+    };
+
+    window.closeLangModal = function(e) {
+      if (e && e.target && e.target.id !== 'langModalBackdrop' && !e.target.classList.contains('lang-modal-close')) return;
+      var modal = document.getElementById('langModalBackdrop');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.selectLanguage = function(code) {
+      localStorage.setItem('wfi_lang', code);
+      var codeEl = document.getElementById('ovLangCode');
+      if (codeEl) codeEl.textContent = code;
+      var modal = document.getElementById('langModalBackdrop');
+      if (modal) modal.style.display = 'none';
+
+      var found = window.WFI_LANGUAGES.find(function(item) { return item.code === code; });
+      var name = found ? found.native : code;
+      if (window.showAppNotification) {
+        window.showAppNotification('Đã chuyển ngôn ngữ hiển thị sang ' + name + ' (' + code + '). Toàn bộ giao diện đã sẵn sàng.', 'success', 'Cập nhật ngôn ngữ');
+      }
+    };
+
+    // Hệ thống thông báo nổi chuẩn WFI: Chiếm 1/3 màn hình, không tự biến mất, nút Đóng rõ ràng
+    window.showAppNotification = function(msg, type, title) {
+      var overlay = document.getElementById('wfiNotifyOverlay');
+      var sheet = document.getElementById('wfiNotifySheet');
+      var statusText = document.getElementById('wfiNotifyStatusText');
+      var titleEl = document.getElementById('wfiNotifyTitle');
+      var contentEl = document.getElementById('wfiNotifyContent');
+      var timeEl = document.getElementById('wfiNotifyTime');
+      var avatarEl = document.getElementById('wfiNotifyAvatar');
+      if (!overlay || !sheet) return;
+
+      var lowerMsg = (msg || '').toLowerCase();
+      var deducedType = type || 'info';
+      var deducedTitle = title;
+
+      if (!title) {
+        if (lowerMsg.indexOf('thành công') !== -1 || lowerMsg.indexOf('claim') !== -1 || lowerMsg.indexOf('chúc mừng') !== -1 || lowerMsg.indexOf('sao chép') !== -1 || lowerMsg.indexOf('đã lưu') !== -1 || lowerMsg.indexOf('đã đổi') !== -1 || lowerMsg.indexOf('kích hoạt') !== -1 || lowerMsg.indexOf('chào mừng') !== -1) {
+          deducedType = 'success';
+          deducedTitle = 'Thao tác thành công';
+        } else if (lowerMsg.indexOf('lỗi') !== -1 || lowerMsg.indexOf('thất bại') !== -1 || lowerMsg.indexOf('không đủ') !== -1 || lowerMsg.indexOf('không thể') !== -1 || lowerMsg.indexOf('không đúng') !== -1 || lowerMsg.indexOf('từ chối') !== -1 || lowerMsg.indexOf('không hợp lệ') !== -1) {
+          deducedType = 'error';
+          deducedTitle = 'Thông báo lỗi';
+        } else if (lowerMsg.indexOf('chờ') !== -1 || lowerMsg.indexOf('vui lòng') !== -1 || lowerMsg.indexOf('lưu ý') !== -1 || lowerMsg.indexOf('hết lượt') !== -1) {
+          deducedType = 'warning';
+          deducedTitle = 'Lưu ý từ hệ thống';
+        } else {
+          deducedType = 'info';
+          deducedTitle = 'Thông báo WFI';
+        }
+      }
+
+      sheet.className = 'wfi-notify-sheet notify-type-' + deducedType;
+
+      var statusLabel = 'Thông báo hệ thống';
+      var iconSvg = '';
+
+      if (deducedType === 'success') {
+        statusLabel = 'Thành công';
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      } else if (deducedType === 'error') {
+        statusLabel = 'Cần kiểm tra';
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#ff4d4f" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+      } else if (deducedType === 'warning') {
+        statusLabel = 'Lưu ý';
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#f3ba2f" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+      } else {
+        statusLabel = 'Thông tin';
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+      }
+
+      if (statusText) statusText.textContent = statusLabel;
+      if (titleEl) titleEl.textContent = deducedTitle;
+      if (contentEl) contentEl.textContent = msg;
+      if (avatarEl) avatarEl.innerHTML = iconSvg;
+
+      var now = new Date();
+      var timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+      if (timeEl) timeEl.textContent = timeStr;
+
+      overlay.style.display = 'flex';
+      setTimeout(function() {
+        overlay.classList.add('is-active');
+      }, 10);
+    };
+
+    window.closeAppNotification = function() {
+      var overlay = document.getElementById('wfiNotifyOverlay');
+      if (!overlay) return;
+      overlay.classList.remove('is-active');
+      setTimeout(function() {
+        overlay.style.display = 'none';
+      }, 220);
+    };
+
+    // Ghi đè toàn bộ showToast để thống nhất trên toàn app
+    window.showToast = function(msg, type, title) {
+      window.showAppNotification(msg, type, title);
+    };
+  </script>
+
+  <!-- MODAL ĐĂNG NHẬP / CHUYỂN TÀI KHOẢN (MKT / CUSTOMER) -->
+  <div class="auth-modal-backdrop" id="authLoginModalBackdrop" style="display:none;" onclick="closeAuthLoginModal(event)">
+    <div class="auth-modal-sheet" onclick="event.stopPropagation()">
+      <div class="auth-modal-header">
+        <h4 id="authModalTitle">Đăng nhập tài khoản</h4>
+        <button type="button" class="auth-modal-close-btn" onclick="closeAuthLoginModal()">✕</button>
+      </div>
+
+      <!-- Quick test account buttons -->
+      <div class="auth-quick-accounts">
+        <span class="auth-quick-title">Bấm 1 chạm để đăng nhập test ngay:</span>
+        <button type="button" class="auth-quick-btn" onclick="loginQuickAccount('mkt.demo@gmail.com', 'mkt123456')">
+          <span>🎯 <strong>Tài khoản MKT</strong> (mkt.demo@gmail.com)</span>
+          <span class="mkt-badge-tag">MKT</span>
+        </button>
+        <button type="button" class="auth-quick-btn" onclick="loginQuickAccount('danghung.crypto@gmail.com', '123456')">
+          <span>👤 <strong>Khách hàng thường</strong> (danghung.crypto@gmail.com)</span>
+          <span style="color:#94a3b8;font-size:10px;">USER</span>
+        </button>
+      </div>
+
+      <div class="mkt-form-group">
+        <label class="mkt-label">Gmail tài khoản</label>
+        <input type="email" id="inputAuthEmail" class="mkt-input" placeholder="nhap.email@gmail.com">
+      </div>
+
+      <div class="mkt-form-group">
+        <label class="mkt-label">Mật khẩu</label>
+        <input type="password" id="inputAuthPassword" class="mkt-input" placeholder="Mật khẩu của bạn">
+      </div>
+
+      <div id="authLoginAlert" style="display:none;font-size:12.5px;padding:8px 12px;border-radius:8px;"></div>
+
+      <button type="button" class="mkt-submit-btn" id="btnSubmitAuthLogin" onclick="handleAuthLoginSubmit()">
+        <span>Đăng nhập</span>
+      </button>
+
+      <!-- NÚT ĐĂNG XUẤT TO RÕ RÀNG -->
+      <button type="button" id="btnAuthLogout" style="width:100%;background:rgba(239, 68, 68, 0.12);border:1px solid rgba(239, 68, 68, 0.35);color:#ef4444;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;padding:12px;margin-top:4px;" onclick="handleAuthLogout()">
+        🚪 Đăng xuất tài khoản (Về Khách thường)
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts Ngoài Với Query Cache-Busting -->
+  <script src="js/data.js?v=20261008_1644"></script>
+  <script src="js/app.js?v=20261008_1644"></script>
+</body>
+</html>

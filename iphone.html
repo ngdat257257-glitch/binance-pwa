@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WFI Mining - Trải nghiệm trên iPhone 16 Pro</title>
+  <meta name="description" content="Trình mô phỏng giao diện app crypto mining WFI trên iPhone 16 Pro với Dynamic Island và iOS Status Bar.">
+  
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css?v=20261008_1515">
+  <link rel="stylesheet" href="css/iphone-mockup.css?v=20261008_1515">
+</head>
+<body class="simulator-body">
+
+  <!-- THANH ĐIỀU KHIỂN MÔ PHỎNG PHÍA TRÊN -->
+  <header class="simulator-toolbar">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Về trang đầy đủ</span>
+      </a>
+      <div class="simulator-title">
+        <span class="device-name">iPhone 16 Pro</span>
+        <span class="ios-ver">iOS 18.2 • Màn hình Super Retina XDR</span>
+      </div>
+    </div>
+
+    <div class="toolbar-actions">
+      <!-- Bộ chọn trang hiển thị trên iPhone: Khách, Quản Trị hoặc Cấu hình MKT -->
+      <div class="device-switcher" style="margin-right:4px;">
+        <button class="switcher-btn active" id="btnViewClient" onclick="switchIphoneFrame('index.html')">App Khách</button>
+        <button class="switcher-btn" id="btnViewManager" onclick="switchIphoneFrame('admin.html')">Bảng Quản Trị</button>
+        <button class="switcher-btn" id="btnViewMktConfig" onclick="switchIphoneFrame('admin.html#mkt')" style="color:#ffb300;font-weight:700;">⚙️ Đổi Logo & Tiêu Đề</button>
+      </div>
+
+      <!-- Bộ chọn thiết bị -->
+      <div class="device-switcher">
+        <button class="switcher-btn active" data-scale="1" data-device="16pro">16 Pro</button>
+        <button class="switcher-btn" data-scale="1.08" data-device="16promax">16 Pro Max</button>
+      </div>
+
+      <a href="index.html" class="btn btn-secondary toolbar-btn-exit" id="btnExitView">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Chế độ web đầy đủ</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- KHU VỰC CHỨA KHUNG MÁY IPHONE -->
+  <main class="phone-stage">
+    <div class="iphone-container" id="iphoneDevice">
+
+      <!-- Các nút bấm vật lý bên ngoài khung máy -->
+      <div class="hardware-button action-button" title="Action Button"></div>
+      <div class="hardware-button volume-up" title="Tăng âm lượng"></div>
+      <div class="hardware-button volume-down" title="Giảm âm lượng"></div>
+      <div class="hardware-button power-button" title="Nút nguồn"></div>
+
+      <!-- Khung viền Titan đen iPhone 16 Pro -->
+      <div class="iphone-chassis">
+        <div class="chassis-inner-border"></div>
+
+        <!-- MÀN HÌNH MÁY IPHONE (SCREEN VIEWPORT) -->
+        <div class="iphone-screen">
+
+          <!-- 1. THANH TRẠNG THÁI IOS (STATUS BAR) -->
+          <div class="ios-status-bar">
+            <!-- Giờ hiện tại bên trái -->
+            <div class="status-time" id="iosTime">09:41</div>
+
+            <!-- DYNAMIC ISLAND TƯƠNG TÁC -->
+            <div class="dynamic-island" id="dynamicIsland" title="Chạm để mở rộng Dynamic Island">
+              <div class="island-pill">
+                <div class="island-left-item">
+                  <span class="island-dot"></span>
+                  <span class="island-text">WFI</span>
+                </div>
+                <div class="island-right-item">
+                  <span class="island-rate">450/d</span>
+                  <div class="sound-wave">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột sóng, WiFi, Pin bên phải -->
+            <div class="status-icons">
+              <!-- Sóng 5G -->
+              <svg class="icon-signal" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="2" y="16" width="3" height="6" rx="1"/>
+                <rect x="7" y="12" width="3" height="10" rx="1"/>
+                <rect x="12" y="8" width="3" height="14" rx="1"/>
+                <rect x="17" y="4" width="3" height="18" rx="1"/>
+              </svg>
+              <!-- 5G text -->
+              <span class="status-5g">5G</span>
+              <!-- Wi-Fi -->
+              <svg class="icon-wifi" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-4.9-3.9a7 7 0 0 1 9.8 0 .8.8 0 0 0 1.2-1.1 8.5 8.5 0 0 0-12.2 0 .8.8 0 0 0 1.2 1.1zm-3.5-3.5a12 12 0 0 1 16.8 0 .8.8 0 0 0 1.2-1.1 13.5 13.5 0 0 0-19.2 0 .8.8 0 0 0 1.2 1.1z"/>
+              </svg>
+              <!-- Pin -->
+              <div class="battery-icon">
+                <div class="battery-level"></div>
+                <div class="battery-terminal"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NỘI DUNG ỨNG DỤNG BÊN TRONG IPHONE (IFRAME CÙNG GỐC) -->
+          <iframe 
+            src="index.html?v=20261008_1517" 
+            class="app-frame" 
+            id="appFrame" 
+            title="Giao diện ứng dụng WFI Mining trên iPhone"
+            loading="eager">
+          </iframe>
+
+          <!-- 2. VẠCH HOME INDICATOR IOS PHÍA ĐÁY MÀN HÌNH -->
+          <div class="ios-home-indicator-bar">
+            <div class="home-indicator"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Cập nhật giờ iOS thực tế
+    function updateIosClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      const el = document.getElementById('iosTime');
+      if (el) el.textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateIosClock, 1000);
+    updateIosClock();
+
+    // Chuyển đổi giữa App Khách, Bảng Quản Trị và Cấu Hình MKT
+    function switchIphoneFrame(url) {
+      const frame = document.getElementById('appFrame');
+      if (frame) {
+        if (url.includes('#')) {
+          const parts = url.split('#');
+          frame.src = parts[0] + '?v=' + Date.now() + '#' + parts[1];
+        } else {
+          frame.src = url + '?v=' + Date.now();
+        }
+      }
+      document.getElementById('btnViewClient')?.classList.toggle('active', url.startsWith('index.html'));
+      document.getElementById('btnViewManager')?.classList.toggle('active', url === 'admin.html');
+      document.getElementById('btnViewMktConfig')?.classList.toggle('active', url.includes('#mkt'));
+      const exitBtn = document.getElementById('btnExitView');
+      if (exitBtn) exitBtn.href = url;
+    }
+
+    // Đăng nhập test MKT / Đăng xuất trực tiếp từ thanh công cụ iPhone
+    function quickIphoneAuth(type) {
+      const frame = document.getElementById('appFrame');
+      if (!frame || !frame.contentWindow) return;
+      try {
+        if (type === 'mkt') {
+          if (typeof frame.contentWindow.loginQuickAccount === 'function') {
+            frame.contentWindow.loginQuickAccount('mkt.demo@gmail.com', 'mkt123456');
+          }
+        } else if (type === 'logout') {
+          if (typeof frame.contentWindow.handleAuthLogout === 'function') {
+            frame.contentWindow.handleAuthLogout();
+          }
+        }
+      } catch (e) {
+        console.warn('Iframe auth error:', e);
+      }
+    }
+
+    // Chuyển đổi kích thước 16 Pro / 16 Pro Max
+    const deviceSwitcherBtns = document.querySelectorAll('.device-switcher:not(:first-child) .switcher-btn');
+    const device = document.getElementById('iphoneDevice');
+
+    deviceSwitcherBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        deviceSwitcherBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const scale = btn.getAttribute('data-scale');
+        device.style.transform = `scale(${scale})`;
+      });
+    });
+
+    // Dynamic Island tương tác mở rộng
+    const island = document.getElementById('dynamicIsland');
+    let isExpanded = false;
+    island.addEventListener('click', () => {
+      isExpanded = !isExpanded;
+      if (isExpanded) {
+        island.classList.add('expanded');
+      } else {
+        island.classList.remove('expanded');
+      }
+    });
+  </script>
+</body>
+</html>

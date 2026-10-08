@@ -1,0 +1,8 @@
+.env
+*.pyc
+__pycache__/
+wfi_database.db
+database.sqlite
+cloudflared
+cloudflared.tgz
+.DS_Store
